@@ -87,3 +87,14 @@ input {
 .p-dialog-mask.p-component-overlay.p-component-overlay-enter.p-dialog-mask-scrollblocker.ng-star-inserted {
     backdrop-filter: blur(4px) !important;
 }
+
+.btn-container .btn-hover {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn-container:hover .btn-hover {
+    opacity: 1;
+    pointer-events: auto;
+}

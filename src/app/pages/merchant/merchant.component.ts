@@ -10,7 +10,8 @@ import { MerchantService } from '../../services/merchant/merchant.service';
 import { MerchantPortalComponent } from "./merchant-portal/merchant-portal.component";
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { PendingSidenavComponent } from "./pending-sidenav/pending-sidenav.component";
-
+import { AuthService } from '../../auth/auth.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -27,7 +28,8 @@ interface SideNavToggle {
     ConfirmPopupModule,
     MerchantPortalComponent,
     SidenavComponent,
-    PendingSidenavComponent
+    PendingSidenavComponent,
+    ProgressSpinnerModule
 ],
   templateUrl: './merchant.component.html',
   styleUrl: './merchant.component.scss',
@@ -43,24 +45,47 @@ export class MerchantComponent implements OnInit {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
-  merchantStatus: boolean | undefined;
+  isActive: boolean | undefined;
+  isPending: boolean | undefined;
+  isInActive: boolean | undefined;
+  error: boolean | undefined;
 
+  isLoggingOut = false;
+  isLoading = false;
+  
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private _merchantService: MerchantService,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private _authService: AuthService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
     if (this.isBrowser) {
-      const merchantstat = localStorage.getItem('merchantStatus');
-      if(merchantstat === 'Pending') {
-        this.merchantStatus = false;
-      } else if(merchantstat === 'Active') {
-        this.merchantStatus = true;
-      }
+      this.isLoading = true;
+
+      this._merchantService.getMerchantProfile().subscribe({
+        next: (res: any) => {
+          const merchantstat = res.merchants[0].status;
+          if(merchantstat === 'Pending') {
+            this.isPending = true;
+          } else if(merchantstat === 'Active') {
+            this.isActive = true;
+          } else if(merchantstat === 'InActive') {
+            this.isInActive = true;
+          }
+          this.isLoading = false;
+        }, error: (error) => {
+          console.log("Error fetching merchant profile", error);
+          this.error = true;
+          this.isLoading = false;
+        }
+      })
+      this._cdr.detectChanges();
+
+
 
       const theme = localStorage.getItem('theme');
       const linkElement = this.#document.getElementById(
@@ -100,6 +125,16 @@ export class MerchantComponent implements OnInit {
     this.isSideNavCollapsed = data.collapsed
   }
 
+  onLogout() {
+    this.isLoggingOut = true;
+    this._authService.onLogout().subscribe({
+      next: () => {
+        this.isLoggingOut = false;
+      }, error: () => {
+        this.isLoggingOut = false;
+      }
+    });
+  }
   // loadMenuBar() {
   //   this.items = [
   //     {

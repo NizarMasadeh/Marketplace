@@ -2,11 +2,28 @@
     <p-tabMenu [model]="items" />
 </div> -->
 
-<app-sidenav-merchant *ngIf="merchantStatus" (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
+<div *ngIf="!isLoading" [@fadeAnimation] [@.disabled]="isLoading">
 
-<app-pending-sidenav *ngIf="!merchantStatus" (onToggleSideNav)="onToggleSideNav($event)"></app-pending-sidenav>
+    <app-sidenav-merchant *ngIf="isActive" (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
 
-<app-merchant-portal
-    [collapsed]="isSideNavCollapsed"
-    [screenWidth]="screenWidth"
-></app-merchant-portal>
+    <app-pending-sidenav *ngIf="isPending" (onToggleSideNav)="onToggleSideNav($event)"></app-pending-sidenav>
+
+    <div *ngIf="isInActive" class=" flex flex-column justify-content-center align-items-center h-30rem">
+        <h3 style="color: var(--red);"> YOUR ACCOUNT IS BLOCKED BY THE SYSTEM!</h3>
+        <div class="btn-container">
+            <p-button class="btn-hover" [loading]="isLoggingOut" [label]="isLoggingOut ? 'Logging out...' : 'Logout'"
+                (onClick)="onLogout()"></p-button>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="error flex flex-column justify-content-center align-items-center h-30rem">
+        <h3 style="color: var(--red);"> Server error! try refreshing the page.</h3>
+    </div>
+
+    <app-merchant-portal *ngIf="!isInActive" [collapsed]="isSideNavCollapsed"
+        [screenWidth]="screenWidth"></app-merchant-portal>
+</div>
+
+<div *ngIf="isLoading" class="flex justify-content-center align-items-center h-30rem">
+    <p-progressSpinner ariaLabel="loading" />
+</div>

@@ -28,6 +28,7 @@ import { MessageService } from 'primeng/api';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 export const appConfig: ApplicationConfig = {
@@ -62,6 +63,7 @@ export const appConfig: ApplicationConfig = {
     ChipsModule,
     IconFieldModule,
     InputIconModule,
-    InputSwitchModule
+    InputSwitchModule,
+    ProgressSpinnerModule
   ]
 };

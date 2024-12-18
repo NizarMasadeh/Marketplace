@@ -33,7 +33,7 @@
                 <div class="merchant-actions">
                     <p-button [severity]="merchant.status === 'Active' ? 'danger' : 'success'"
                         [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'"
-                        (onClick)="onUpdateMerchant(merchant)" [loading]="isUpdating" class="action-button"></p-button>
+                        (onClick)="onUpdateMerchant(merchant); $event.stopPropagation()" [loading]="isUpdating" class="action-button"></p-button>
                 </div>
             </div>
         </div>

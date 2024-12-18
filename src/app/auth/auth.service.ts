@@ -59,7 +59,6 @@ export class AuthService {
           if (userType === 'merchant') {
               this._merchantService.getMerchantProfile().subscribe(
                 (res: any) => {
-                  console.log("Merchant profile data: ", res);
                   
                   if (res.merchants.length === 0) {
                     this._router.navigate(['/merchant-profile-register'])
@@ -99,7 +98,6 @@ export class AuthService {
     return this._httpClient.post(`${environment.serverAuth}register`, registerForm).pipe(
       tap({
         next: (res: any) => {
-          console.log("successfully registered: ", res);
         }, error: (error) => {
           console.error("Error stuff: ", error);
         }
@@ -180,7 +178,6 @@ export class AuthService {
       tap({
         next: (res: any) => {
           localStorage.clear();
-          console.log("Logged out: ", res);
           this.isAuthenticatedSubject.next(false);
           this._router.navigate(['/home']);
         }, error: (error) => {

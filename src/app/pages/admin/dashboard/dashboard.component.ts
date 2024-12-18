@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
@@ -19,7 +19,7 @@ import { fadeAnimation } from '../../../widgets/animations/fade.animation';
   styleUrl: './dashboard.component.scss',
   animations: [fadeAnimation]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   salesData: any;
   revenueData: any;
   transactions: any;
