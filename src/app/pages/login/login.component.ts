@@ -1,16 +1,16 @@
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { AuthService } from '../../auth/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { fadeOut } from '../../widgets/animations/fadeout.animation';
 import { NavbarService } from '../../services/navbar/navbar.service';
 import { MerchantService } from '../../services/merchant/merchant.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +28,7 @@ import { MerchantService } from '../../services/merchant/merchant.service';
   providers: [MessageService, AuthService],
   animations: [fadeOut]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private isBrowser: boolean;
 
   #document = inject(DOCUMENT);
@@ -81,7 +81,8 @@ export class LoginComponent {
         console.log("Logged:", res);
 
         this.loggedIn = true;
-
+        this._navbarService.checkTheme();
+        
         if (res.user.userType === 'customer') {
           this._router.navigate(['/']);
         } else if (res.user.userType === 'admin') {

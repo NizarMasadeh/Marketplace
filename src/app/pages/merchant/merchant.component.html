@@ -2,7 +2,9 @@
     <p-tabMenu [model]="items" />
 </div> -->
 
-<app-sidenav-merchant (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
+<app-sidenav-merchant *ngIf="merchantStatus" (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
+
+<app-pending-sidenav *ngIf="!merchantStatus" (onToggleSideNav)="onToggleSideNav($event)"></app-pending-sidenav>
 
 <app-merchant-portal
     [collapsed]="isSideNavCollapsed"

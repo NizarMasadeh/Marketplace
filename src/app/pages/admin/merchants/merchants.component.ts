@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -31,10 +31,16 @@ export class MerchantsComponent implements OnInit {
   isLoading = false;
   isUpdating = false;
 
+  status: any;
+  statusText: string = '';
+  successText: string = '';
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private _adminService: AdminService,
-    private _messageService: MessageService
+    private _messageService: MessageService,
+    private _confirmationService: ConfirmationService,
+    private _cdr: ChangeDetectorRef
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -46,19 +52,71 @@ export class MerchantsComponent implements OnInit {
   }
 
   getAllMerchants() {
+    this.isLoading = true;
     this._adminService.getAllMerchants().subscribe({
       next: (res: any) => {
         console.log("Merchants: ", res);
+        this.isLoading = false;
         this.merchants = res.merchants;
       }, error: (error) => {
         console.error("Error fetching merchants", error);
-        
+        this.isLoading = false;
       }
     })
   }
 
   onUpdateMerchant(merchant: any) {
     console.log("Clicked on this: ", merchant);
-    
+    const merchantStatus = merchant.status;
+
+    if(merchantStatus === 'Active') {
+      this.status = 'InActive'
+      this.statusText = 'Deactivate';
+      this.successText = 'Deactivated';
+    } else if(merchantStatus === 'Pending' || 'InActive') {
+      this.status = 'Active'
+      this.statusText = 'Activate';
+      this.successText = 'Activated';
+    } 
+
+    this._confirmationService.confirm({
+      message: `Are you sure that you want to <b>${this.statusText}</b> ${merchant.full_name}?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.isLoading = true;
+        this._cdr.detectChanges();
+        this._adminService.updateMerchantStatus(merchant.id, this.status).subscribe({
+          next: () => {
+            this._messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: `${merchant.full_name} was ${this.successText}`
+            })
+            this.getAllMerchants();
+          }, error: (error) => {
+            console.error("Error updating merchant status: ", error);
+            this.isLoading = false;
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error updating merchant status!'
+            })
+          }
+        });
+      },
+      reject: () => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'You have rejected',
+          life: 3000
+        });
+      }
+    });
+  
   }
 }

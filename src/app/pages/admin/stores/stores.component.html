@@ -36,6 +36,11 @@
         }
     </div>
 
+    <div *ngIf="!isLoading && stores.length === 0" class="no-stores flex justify-content-center align-items-center h-30rem" 
+    [@fadeAnimation] [@.disabled]="isLoading && stores.length > 0">
+        <h3>No stores found!</h3>
+    </div>
+
     <div *ngIf="isLoading" class="skeleton-container">
         <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" [@fadeAnimation]>
             <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>

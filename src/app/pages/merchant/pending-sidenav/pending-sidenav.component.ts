@@ -1,8 +1,8 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Output, Inject, PLATFORM_ID, EventEmitter, ChangeDetectorRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Output, PLATFORM_ID } from '@angular/core';
+import { AuthService } from '../../../auth/auth.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../../auth/auth.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -10,18 +10,17 @@ interface SideNavToggle {
 }
 
 @Component({
-  selector: 'app-sidenav-merchant',
+  selector: 'app-pending-sidenav',
   imports: [
     CommonModule,
     RouterLink,
     RouterLinkActive,
     ButtonModule
   ],
-  templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss'
+  templateUrl: './pending-sidenav.component.html',
+  styleUrl: './pending-sidenav.component.scss'
 })
-
-export class SidenavComponent implements OnInit {
+export class PendingSidenavComponent {
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter()
 
   isBrowser: boolean;
@@ -54,6 +53,9 @@ export class SidenavComponent implements OnInit {
   }
 
   loadNavData() {
+
+    //MAKE THEM DISABLED AND SHOW A MESSAGE THAT HE HAS TO BE ACTIVATED BY THE ADMIN BEFORE CREATING A STORE
+
     this.navData = [
       {
         routerLink: 'dashboard',
@@ -65,21 +67,21 @@ export class SidenavComponent implements OnInit {
         icon: 'pi pi-shop',
         label: 'Store'
       },
-      {
-        routerLink: 'products',
-        icon: 'pi pi-box',
-        label: 'Products'
-      },
-      {
-        routerLink: 'messages',
-        icon: 'pi pi-inbox',
-        label: 'Messages'
-      },
-      {
-        routerLink: 'settings',
-        icon: 'pi pi-cog',
-        label: 'Settings'
-      }
+      // {
+      //   routerLink: 'products',
+      //   icon: 'pi pi-box',
+      //   label: 'Products'
+      // },
+      // {
+      //   routerLink: 'messages',
+      //   icon: 'pi pi-inbox',
+      //   label: 'Messages'
+      // },
+      // {
+      //   routerLink: 'settings',
+      //   icon: 'pi pi-cog',
+      //   label: 'Settings'
+      // }
     ];
   }
 

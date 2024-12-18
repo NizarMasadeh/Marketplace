@@ -107,8 +107,15 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.isRegistering = true;
 
-    this._authService.onRegister(this.registerForm.value).subscribe(
-      () => {
+    const theme = localStorage.getItem('theme');
+
+    const registerData = {
+      ...this.registerForm.value,
+      theme: theme
+    }
+
+    this._authService.onRegister(registerData).subscribe({
+      next: () => {
         this.registerForm.reset();
         this.isRegistering = false;
         this._messageService.add({
@@ -120,7 +127,7 @@ export class RegisterComponent implements OnInit {
         setTimeout(() => {
           this._router.navigate(['/login']);
         }, 1300);
-      }, () =>   {
+      }, error: () =>   {
         this.isRegistering = false;
         this._messageService.add({
           severity: 'error',
@@ -128,6 +135,6 @@ export class RegisterComponent implements OnInit {
           detail: 'Something wrong happened!',
         })
       }
-    )
+    })
   }
 }

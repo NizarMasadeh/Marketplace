@@ -32,7 +32,7 @@ export class AdminService {
   }
 
 
-  /***********************MERCHANTS*****************************/
+  /***********************USERS*****************************/
 
   getAllUsers(): Observable<any> {
     return this._httpClient.get(`${environment.server}users`, { headers: this.getHeaders()});
@@ -51,6 +51,17 @@ export class AdminService {
     return this._httpClient.get(`${environment.server}merchants`, { headers: this.getHeaders()});
   }
 
+  getMerchantById(merchantId: any): Observable<any> {
+    return this._httpClient.get(`${environment.server}merchants/profile?id=${merchantId}`, { headers: this.getHeaders()});
+  }
+
+  updateMerchantStatus(merchantId: any, status: any): Observable<any> {
+    const updatedData = {
+      status: `${status}`
+    }
+
+    return this._httpClient.patch(`${environment.server}merchants/profile?id=${merchantId}`, updatedData, { headers: this.getHeaders()});
+  }
 
   /***********************************************************/
 

@@ -35,16 +35,9 @@ export class ThemeService {
   updateTheme(theme: any): Observable<any> {
     if (this.isBrowser) {
 
-      const userType = localStorage.getItem('userType');
       const userId = localStorage.getItem('userId');
 
-      if (userType === 'merchant') {
-        return this._httpClient.put(`${environment.server}merchants/profile?id=${userId}`, theme, { headers: this.getHeaders() })
-      }
-
-      if (userType === 'admin') {
-        return this._httpClient.put(`${environment.server}admins?id=${userId}`, theme, { headers: this.getHeaders() })
-      }
+      return this._httpClient.patch(`${environment.server}users/profile?id=${userId}`, theme, { headers: this.getHeaders() })
     }
     return of(null);
   }

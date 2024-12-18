@@ -133,17 +133,24 @@ export class MerchantRegisterComponent implements OnInit{
 
     const form = this.registerForm.value;
 
+    const theme = localStorage.getItem('theme');
+
     const registerData = {
       email: form.email,
       password: form.password,
       userType: 'merchant',
       fullName: form.fullName,
-      status: 'Pending'
+      status: 'Pending',
+      theme: theme
     }
 
+    console.log("Form to be registered for merchant user: ", registerData);
+    
     this._authService.onRegister(registerData).subscribe({
       next: (res: any) => {
 
+        console.log("Merchant user created:", res);
+        
         this._messageService.add({
           severity: 'success',
           summary: 'Success',

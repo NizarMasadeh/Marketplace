@@ -7,7 +7,7 @@
         <div class="merchant-card">
             <div class="merchant-card-header relative">
                 <div class="dark-overlay">
-                    <img [src]="merchant.merchant_bg" alt="Banner" class="banner-image" />
+                    <img [src]="merchant.bg_img" alt="Banner" class="banner-image" />
                 </div>
                 <span class="status-badge" [ngClass]="merchant.status === 'Active' ? 'badge-active' : merchant.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
                     {{merchant.status}}
@@ -18,7 +18,7 @@
             </div>
             <div class="merchant-card-body relative">
                 <div class="merchant-avatar" [ngClass]="merchant.status === 'Active' ? 'border-active' : merchant.status === 'InActive' ? 'border-inactive' : 'border-pending'">
-                    <img [src]="merchant.merchant_logo" alt="Avatar" />
+                    <img [src]="merchant.pfp_img" alt="Avatar" />
                 </div>
                 <div class="merchant-details">
                     <h2 class="merchant-name">{{merchant.full_name}}</h2>
@@ -28,9 +28,14 @@
                     </div>
                 </div>
                 <div class="merchant-actions">
-                    <p-button [severity]="merchant.status === 'Active' ? 'danger' : 'success'" [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'" 
-                    (onClick)="onUpdateMerchant(merchant)" [loading]="isUpdating"></p-button>
-                </div>
+                    <p-button
+                      [severity]="merchant.status === 'Active' ? 'danger' : 'success'"
+                      [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'"
+                      (onClick)="onUpdateMerchant(merchant)"
+                      [loading]="isUpdating"
+                      class="action-button"
+                    ></p-button>
+                  </div>
             </div>
         </div>
         }
@@ -45,6 +50,10 @@
             <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
             <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
         </div>
+    </div>
+
+    <div *ngIf="!isLoading && merchants.length === 0" [@fadeAnimation] [@.disabled]="isLoading && merchants.length > 0" class="no-merchants h-30rem flex justify-content-center align-items-center">
+        <h3>No merchants registered!</h3>
     </div>
 </div>
 

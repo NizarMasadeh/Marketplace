@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { MerchantService } from '../../services/merchant/merchant.service';
 import { MerchantPortalComponent } from "./merchant-portal/merchant-portal.component";
 import { SidenavComponent } from './sidenav/sidenav.component';
+import { PendingSidenavComponent } from "./pending-sidenav/pending-sidenav.component";
 
 
 interface SideNavToggle {
@@ -25,8 +26,9 @@ interface SideNavToggle {
     ToastModule,
     ConfirmPopupModule,
     MerchantPortalComponent,
-    SidenavComponent
-  ],
+    SidenavComponent,
+    PendingSidenavComponent
+],
   templateUrl: './merchant.component.html',
   styleUrl: './merchant.component.scss',
   animations: [fadeAnimation],
@@ -41,6 +43,7 @@ export class MerchantComponent implements OnInit {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
+  merchantStatus: boolean | undefined;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -52,6 +55,13 @@ export class MerchantComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isBrowser) {
+      const merchantstat = localStorage.getItem('merchantStatus');
+      if(merchantstat === 'Pending') {
+        this.merchantStatus = false;
+      } else if(merchantstat === 'Active') {
+        this.merchantStatus = true;
+      }
+
       const theme = localStorage.getItem('theme');
       const linkElement = this.#document.getElementById(
         'app-theme',

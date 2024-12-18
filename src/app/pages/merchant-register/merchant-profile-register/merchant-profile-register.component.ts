@@ -11,8 +11,8 @@ import { MessageService } from 'primeng/api';
 import { fadeAnimation } from '../../../widgets/animations/fade.animation';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
-import { AuthService } from '../../../auth/auth.service';
 import { COUNTRIES } from '../../../widgets/countries';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-merchant-profile-register',
