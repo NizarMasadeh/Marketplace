@@ -8,6 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { fadeAnimation } from '../../../widgets/animations/fade.animation';
+import { MerchantDataComponent } from "../dialogs/merchant-data/merchant-data.component";
 
 @Component({
   selector: 'app-merchants',
@@ -17,8 +18,9 @@ import { fadeAnimation } from '../../../widgets/animations/fade.animation';
     ButtonModule,
     SkeletonModule,
     ToastModule,
-    ConfirmDialogModule
-  ],
+    ConfirmDialogModule,
+    MerchantDataComponent
+],
   templateUrl: './merchants.component.html',
   styleUrl: './merchants.component.scss',
   animations: [fadeAnimation],
@@ -34,6 +36,9 @@ export class MerchantsComponent implements OnInit {
   status: any;
   statusText: string = '';
   successText: string = '';
+
+  dialogVisible = false;
+  selectedMerchant: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -55,7 +60,6 @@ export class MerchantsComponent implements OnInit {
     this.isLoading = true;
     this._adminService.getAllMerchants().subscribe({
       next: (res: any) => {
-        console.log("Merchants: ", res);
         this.isLoading = false;
         this.merchants = res.merchants;
       }, error: (error) => {
@@ -68,17 +72,17 @@ export class MerchantsComponent implements OnInit {
   onUpdateMerchant(merchant: any) {
     console.log("Clicked on this: ", merchant);
     const merchantStatus = merchant.status;
-
+  
     if(merchantStatus === 'Active') {
       this.status = 'InActive'
       this.statusText = 'Deactivate';
       this.successText = 'Deactivated';
-    } else if(merchantStatus === 'Pending' || 'InActive') {
+    } else if(merchantStatus === 'Pending' || merchantStatus === 'InActive') {
       this.status = 'Active'
       this.statusText = 'Activate';
       this.successText = 'Activated';
     } 
-
+  
     this._confirmationService.confirm({
       message: `Are you sure that you want to <b>${this.statusText}</b> ${merchant.full_name}?`,
       header: 'Confirmation',
@@ -88,16 +92,20 @@ export class MerchantsComponent implements OnInit {
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.isLoading = true;
+        this.merchants = [];
         this._cdr.detectChanges();
+  
         this._adminService.updateMerchantStatus(merchant.id, this.status).subscribe({
           next: () => {
             this._messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: `${merchant.full_name} was ${this.successText}`
+              detail: `${merchant.full_name} got ${this.successText}`
             })
+            
             this.getAllMerchants();
-          }, error: (error) => {
+          }, 
+          error: (error) => {
             console.error("Error updating merchant status: ", error);
             this.isLoading = false;
             this._messageService.add({
@@ -117,6 +125,15 @@ export class MerchantsComponent implements OnInit {
         });
       }
     });
-  
+  }
+
+  onMerchant(merchant: any) {
+    this.selectedMerchant = merchant;
+    this.dialogVisible = true;
+  }
+
+  closeDialog() {
+    this.dialogVisible = false;
+    this.selectedMerchant = null;
   }
 }

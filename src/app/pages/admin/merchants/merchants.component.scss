@@ -6,7 +6,7 @@
     border: 1px solid var(--surface-border);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: .3s ease-in-out;
-
+    cursor: pointer;
     .merchant-card-header {
         .dark-overlay {
 
@@ -133,6 +133,10 @@
             }
         }
     }
+}
+
+.merchant-card:hover {
+    box-shadow: 0 -3px 14px var(--surface-100), 0 9px 21px var(--surface-100);
 }
 
 .flagimg {

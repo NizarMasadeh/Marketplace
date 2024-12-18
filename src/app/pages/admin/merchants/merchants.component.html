@@ -1,23 +1,26 @@
 <div class="container mt-3">
 
-    <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" *ngIf="!isLoading"
-        [@fadeAnimation] [@.disabled]="isLoading">
+    <div *ngIf="!isLoading" class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5"
+        [ngClass]="!isLoading ? 'fadeIn' : ''">
         @for (merchant of merchants; track merchant.id) {
 
-        <div class="merchant-card">
+        <div class="merchant-card" (click)="onMerchant(merchant)">
             <div class="merchant-card-header relative">
                 <div class="dark-overlay">
                     <img [src]="merchant.bg_img" alt="Banner" class="banner-image" />
                 </div>
-                <span class="status-badge" [ngClass]="merchant.status === 'Active' ? 'badge-active' : merchant.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
+                <span class="status-badge"
+                    [ngClass]="merchant.status === 'Active' ? 'badge-active' : merchant.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
                     {{merchant.status}}
                 </span>
                 <div *ngIf="merchant?.country?.flag" class="flagimg">
-                    <img [src]="'https://flagcdn.com/' + merchant?.country?.code + '.svg'" height="20px" width="20px" class="flag" alt="">
+                    <img [src]="'https://flagcdn.com/' + merchant?.country?.code + '.svg'" height="20px" width="20px"
+                        class="flag" alt="">
                 </div>
             </div>
             <div class="merchant-card-body relative">
-                <div class="merchant-avatar" [ngClass]="merchant.status === 'Active' ? 'border-active' : merchant.status === 'InActive' ? 'border-inactive' : 'border-pending'">
+                <div class="merchant-avatar"
+                    [ngClass]="merchant.status === 'Active' ? 'border-active' : merchant.status === 'InActive' ? 'border-inactive' : 'border-pending'">
                     <img [src]="merchant.pfp_img" alt="Avatar" />
                 </div>
                 <div class="merchant-details">
@@ -28,14 +31,10 @@
                     </div>
                 </div>
                 <div class="merchant-actions">
-                    <p-button
-                      [severity]="merchant.status === 'Active' ? 'danger' : 'success'"
-                      [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'"
-                      (onClick)="onUpdateMerchant(merchant)"
-                      [loading]="isUpdating"
-                      class="action-button"
-                    ></p-button>
-                  </div>
+                    <p-button [severity]="merchant.status === 'Active' ? 'danger' : 'success'"
+                        [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'"
+                        (onClick)="onUpdateMerchant(merchant)" [loading]="isUpdating" class="action-button"></p-button>
+                </div>
             </div>
         </div>
         }
@@ -52,10 +51,13 @@
         </div>
     </div>
 
-    <div *ngIf="!isLoading && merchants.length === 0" [@fadeAnimation] [@.disabled]="isLoading && merchants.length > 0" class="no-merchants h-30rem flex justify-content-center align-items-center">
+    <div *ngIf="!isLoading && merchants.length === 0" [@fadeAnimation] [@.disabled]="isLoading && merchants.length > 0"
+        class="no-merchants h-30rem flex justify-content-center align-items-center">
         <h3>No merchants registered!</h3>
     </div>
 </div>
 
 <p-toast />
 <p-confirmDialog />
+
+<app-merchant-data [visible]="dialogVisible" [merchantData]="selectedMerchant" (updated)="getAllMerchants()" (visibleChange)="closeDialog()"></app-merchant-data>

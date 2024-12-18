@@ -1,0 +1,155 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '90vw', maxWidth: '1200px' }"
+    [header]="merchant?.full_name + ' Details'" (onHide)="closeDialog()" [draggable]="false" styleClass="p-fluid">
+    <div *ngIf="!isLoading" [ngClass]="!isLoading ? 'fadeIn' : ''"
+        class="border-round surface-card p-4">
+        <div class="grid">
+            <div class="col-12 md:col-4 lg:col-3">
+                <div class="flex flex-column align-items-center">
+                    <img [src]="merchant?.pfp_img" class="pfpImg" [alt]="merchant?.full_name"
+                        [ngClass]="merchant?.status === 'Active' ? 'border-active' : merchant?.status === 'Pending' ? 'border-pending' : 'border-inactive'">
+
+                    <h2 class="mt-2 mb-0">{{merchant?.full_name}}</h2>
+                    <p class="text-500 mt-0">{{merchant?.user_type | titlecase}}</p>
+                    <p-tag [value]="merchant?.status" [severity]="merchant?.status === 'Active' ? 'success' : 'danger'">
+                    </p-tag>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-8 lg:col-9">
+                <div class="grid">
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">Email</label>
+                        <div class="p-inputtext p-component p-filled">{{merchant?.email}}</div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">Commercial Number</label>
+                        <div class="p-inputtext p-component p-filled">{{merchant?.commercial_number}}</div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">National Number</label>
+                        <div class="p-inputtext p-component p-filled">{{merchant?.national_number}}</div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">Country</label>
+                        <div class="p-inputtext p-component p-filled flex align-items-center">
+                            <img style="width: 20px; margin-right: 8px;"
+                                [src]="'https://flagcdn.com/' + merchant?.country?.code + '.svg'"
+                                [alt]="merchant?.country?.country" />
+                            {{merchant?.country?.country}}
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">Products count</label>
+                        <div class="p-inputtext p-component p-filled">{{merchant?.products?.length}}</div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <label class="block text-500 font-medium mb-2">Created At</label>
+                        <div class="p-inputtext p-component p-filled">{{merchant?.created_at | date:'medium'}}</div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3 merchant-actions">
+                        <p-button [severity]="merchant?.status === 'Active' ? 'danger' : 'success'"
+                            [label]="merchant?.status === 'Active' ? 'Deactivate' : 'Activate'"
+                            (onClick)="onUpdateMerchant()" [loading]="isUpdating" class="action-button"></p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3>Background Image</h3>
+            <img [src]="merchant?.bg_img" [alt]="merchant?.full_name + ' background'"
+                style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 4px;">
+        </div>
+        <div class="mt-4" *ngIf="merchant?.products?.length">
+            <h3>Products</h3>
+            <p-table [value]="merchant?.products" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>{{product.id}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.price | currency}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="mt-4" *ngIf="merchant?.stores?.length">
+            <h3>Stores</h3>
+            <p-table [value]="merchant?.stores" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-store>
+                    <tr>
+                        <td>{{store.id}}</td>
+                        <td>{{store.name}}</td>
+                        <td>{{store.location}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    
+    <div *ngIf="isLoading" class="border-round border-1 surface-border p-4 surface-card">
+    
+        <div class="grid">
+            <div class="col-12 md:col-4 lg:col-3">
+                <div class="flex flex-column justify-content-center align-items-center">
+                    <div class="flex flex-column justify-content-center align-items-center gap-2">
+                        <p-skeleton shape="circle" size="9rem" styleClass="mr-2" />
+                        <p-skeleton width="10rem" styleClass="mb-2" />
+                    </div>
+                    <div class="flex flex-column justify-content-center align-items-center gap-2">
+                        <p-skeleton width="4rem" height="2rem" />
+                        <p-skeleton width="3rem" height="2rem" />
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-12 md:col-8 lg:col-9">
+                <div class="grid">
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4 mb-3 merchant-actions">
+                        <p-skeleton width="15rem" height="4rem" />
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-skeleton width="100%" height="230px" />
+    </div>
+</p-dialog>
+
+<p-toast />
+<p-confirmDialog></p-confirmDialog>
