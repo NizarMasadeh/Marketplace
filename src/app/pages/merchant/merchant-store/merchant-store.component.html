@@ -1,0 +1,75 @@
+<div *ngIf="!stores && !isLoading" class="flex flex-column justify-content-center align-items-center h-30rem gap-6"
+    [@fadeAnimation] [@.disabled]="isLoading && isTextLoading">
+    <span class="text-2xl font-semibold">No stores found</span>
+    <button pButton (click)="onCreateStore()" label="Create store"></button>
+</div>
+
+<app-merchant-create-store [(visible)]="createStoreDialog" (visibleChange)="getStores()"></app-merchant-create-store>
+
+<div class="store-container mt-3">
+
+    <div *ngIf="isLoading || uploadingBg || uploadingLogo" class="skeleton">
+        <div class="images-skeleton">
+            <div class="bgimage w-full h-20rem">
+                <p-skeleton *ngIf="!bgImageLoaded || uploadingBg || uploadingLogo " width="100%"
+                    height="100%"></p-skeleton>
+            </div>
+
+            <div class="logoimage flex w-full justify-content-center">
+                <div class="circleFrame border-2 border-300">
+                    <p-skeleton *ngIf="!logoImageLoaded || uploadingBg ||  uploadingLogo" shape="circle" width="100%"
+                        height="100%"></p-skeleton>
+                </div>
+            </div>
+        </div>
+
+        <div class="title m-5 flex flex-column justify-content-center gap-2">
+            <div class="flex justify-content-center mt-4">
+                <p-skeleton *ngIf="isLoading || uploadingLogo || uploadingBg" height="25px" width="80px"></p-skeleton>
+            </div>
+            <div class="flex justify-content-center align-items-center gap-2">
+                <p-skeleton *ngIf="isLoading || uploadingLogo || uploadingBg" height="20px" width="100px"></p-skeleton>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="stores && !uploadingBg && !uploadingLogo && !isLoading" class="store" [@fadeAnimation]
+        [@.disabled]="isLoading && uploadingBg && uploadingLogo && isTextLoading">
+        <div class="images">
+            <div class="bgimage w-full h-20rem relative dark-overlay">
+                <img [src]="stores.store_bg" alt="Background Image" (load)="onBgImageLoad()"
+                    [class.hidden]="!bgImageLoaded || uploadingBg" />
+                <span class="status" [ngClass]="stores.status === 'Active' ? 'bg-green-400' :
+                                stores.status === 'InActive' ? 'bg-red-400' :
+                                'bg-orange-400'">{{stores.status}}</span>
+                <i class="bg-camera pi pi-camera" (click)="bgInput.click()"></i>
+                <input #bgInput type="file" accept="image/*" style="display: none"
+                    (change)="onBgUpload($event); $event.stopPropagation()" />
+            </div>
+
+            <div class="logoimage flex w-full justify-content-center">
+                <div class="circleFrame border-2 border-200">
+                    <img [src]="stores.store_logo" alt="Logo Image" (load)="onLogoImageLoad()"
+                        [class.hidden]="!logoImageLoaded || uploadingLogo" />
+                    <i class="logo-camera pi pi-camera" (click)="logoInput.click()"></i>
+                    <input #logoInput type="file" accept="image/*" style="display: none"
+                        (change)="onLogoUpload($event); $event.stopPropagation()" />
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!isTextLoading" class="title m-6 flex flex-column justify-content-center text-center">
+            <div class="name flex justify-content-center">
+                <p class="text-2xl font-medium m-auto">{{stores.name}}</p>
+            </div>
+            <div class="location flex justify-content-center align-items-center gap-2">
+                <img [src]="'https://flagcdn.com/' + stores.location.code + '.svg'" height="20px" width="20px"
+                    class="flag" alt="">
+                <span class="text-gray-400">{{stores.location.country}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>

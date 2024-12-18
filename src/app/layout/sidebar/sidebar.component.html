@@ -1,0 +1,62 @@
+<p-sidebar #sidebarRef [(visible)]="sideBarVisible" position="right" (onHide)="onHide()">
+    <ng-template pTemplate="headless">
+        <div class="flex flex-column h-full">
+            <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
+                <span class="inline-flex align-items-center gap-2">
+                    <span class="font-semibold text-2xl text-primary">Your Logo</span>
+                </span>
+                <span>
+                    <p-button type="button" (onClick)="closeCallback($event)" icon="pi pi-times" rounded="true"
+                        outlined="true"></p-button>
+                </span>
+            </div>
+
+            <div class="overflow-y-auto flex flex-column justify-content-between h-full">
+                <ul class="list-none p-3 m-0">
+                    <li>
+                        <div *ngIf="isAuthenticated" class="p-3 flex align-items-center gap-3 text-600 p-ripple">
+                            <span>({{userType}})</span>
+                        </div>
+                        <ul class="list-none p-0 m-0 overflow-hidden">
+                            <li *ngFor="let item of menuItems" (click)="onMenuItemClick(item)">
+                                <a pRipple
+                                    class="flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                    <i [class]="item.icon + ' mr-2'"></i>
+                                    <span class="font-medium">{{item.label}}</span>
+                                    <span *ngIf="item.badge"
+                                        class="inline-flex align-items-center justify-content-center ml-auto bg-primary border-circle"
+                                        style="min-width: 1.5rem; height: 1.5rem">{{item.badge}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul *ngIf="isAuthenticated" class="list-none p-3 m-0">
+                    <li>
+                        <ul class="list-none p-0 m-0 overflow-hidden">
+                            <li (click)="onLogout()">
+                                <a pRipple
+                                    class="flex align-items-center cursor-pointer gap-2 p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                    <i class="mr-2"
+                                        [ngClass]="isLoggingOut ? 'pi pi-spin pi-spinner' : 'pi pi-sign-out'"></i>
+                                    <span class="font-medium">{{ isLoggingOut ? 'Logging out...' : 'Logout'}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mt-auto">
+                <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+                <a pRipple
+                    class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                        shape="circle" />
+                    <span class="font-bold">{{userName}}</span>
+                </a>
+            </div>
+        </div>
+    </ng-template>
+</p-sidebar>

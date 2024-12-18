@@ -1,0 +1,362 @@
+// Variables
+$primary-color: #121212;
+$secondary-color: #666;
+$white: #fff;
+$gray-light: #f5f5f5;
+$font-primary: Arial, sans-serif;
+
+// Reset
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-primary;
+    line-height: 1.6;
+}
+
+// Header Styles
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 19vh;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid;
+    .search-container {
+        flex: 1;
+        max-width: 400px;
+        position: relative;
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid;
+            border-color: var(--primary-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+
+            &:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            cursor: pointer;
+            background: transparent;
+        }
+    }
+
+    .logo {
+        flex: 2;
+        text-align: center;
+
+        span {
+            cursor: pointer;
+            font-size: 40px;
+            font-weight: 600;
+            font-family: logo;
+        }
+    }
+
+    .user-actions {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1.5rem;
+
+        .action-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .count {
+                font-size: 0.8rem;
+            }
+        }
+        .action-link-a {
+          transition: width 0.2s ease-in-out;
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--primary-color);
+        }
+
+        &:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+            &::after {
+                width: 100%;
+            }
+        }
+        }
+    }
+}
+
+// Navigation Styles
+.secondary-nav {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid;
+  ul {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+
+      a {
+          text-decoration: none;
+          font-size: 0.8rem;
+          letter-spacing: 0.5px;
+          color: var(--primary-color);
+          position: relative;
+          
+          &::after {
+              content: '';
+              position: absolute;
+              bottom: -2px;
+              left: 0;
+              width: 0;
+              height: 1px;
+              background-color: var(--primary-color);
+              transition: width 0.2s ease-in-out;
+          }
+
+          &:hover {
+              color: var(--primary-color);
+              
+              &::after {
+                  width: 100%;
+              }
+          }
+      }
+  }
+}
+
+.main-nav {
+  padding: 1rem 0;
+
+  ul {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+
+      a {
+          text-decoration: none;
+          color: var(--primary-color-text);
+          font-size: 0.9rem;
+          position: relative;
+
+          &::after {
+              content: '';
+              position: absolute;
+              bottom: -2px;
+              left: 0;
+              width: 0;
+              height: 1px;
+              background-color: var(--primary-color-text);
+              transition: width 0.2s ease-in-out;
+          }
+
+          &:hover {
+              &::after {
+                  width: 100%;
+              }
+          }
+      }
+  }
+}
+
+// Hero Slider Styles
+.hero-slider {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+
+    .slide {
+        position: relative;
+        height: 100%;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .slide-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: $primary-color;
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .shop-button {
+            background: $primary-color;
+            color: $white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    }
+
+    .slider-nav {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+        z-index: 2;
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid $white;
+            cursor: pointer;
+
+            &.active {
+                background: $white;
+            }
+        }
+    }
+}
+
+.profBtn {
+    height: 34px !important;
+    width: 33px !important;
+    border-radius: 23%;
+}
+
+
+/* a clone from joshwcomeau.com 
+ * but this version runs on pure CSS
+ */
+
+ .themeToggle {
+    color: #bbb;
+    width: 3em;
+  }
+  
+  .st-sunMoonThemeToggleBtn {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .st-sunMoonThemeToggleBtn .themeToggleInput {
+    opacity: 0;
+    width: 100%;
+    aspect-ratio: 1;
+  }
+  
+  .st-sunMoonThemeToggleBtn svg {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s ease;
+    transform: rotate(40deg);
+  }
+  
+  .st-sunMoonThemeToggleBtn svg .sunMoon {
+    transform-origin: center center;
+    transition: inherit;
+    transform: scale(1);
+  }
+  
+  .st-sunMoonThemeToggleBtn svg .sunRay {
+    transform-origin: center center;
+    transform: scale(0);
+  }
+  
+  .st-sunMoonThemeToggleBtn svg mask > circle {
+    transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
+    transform: translate(0px, 0px);
+  }
+  
+  .st-sunMoonThemeToggleBtn svg .sunRay2 {
+    animation-delay: 0.05s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay3 {
+    animation-delay: 0.1s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay4 {
+    animation-delay: 0.17s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay5 {
+    animation-delay: 0.25s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay5 {
+    animation-delay: 0.29s !important;
+  }
+  
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
+    transform: rotate(90deg);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
+    transform: translate(16px, -3px);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
+    transform: scale(0.55);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
+    animation: showRay1832 0.4s ease 0s 1 forwards;
+  }
+  
+  @keyframes showRay1832 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+
+.darkMode {
+  background: $primary-color;
+}
+
+.lightMode {
+  background: $white;
+}

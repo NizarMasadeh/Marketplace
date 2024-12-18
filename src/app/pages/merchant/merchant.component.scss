@@ -1,0 +1,28 @@
+.tabmenu-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .tabmenu {
+    flex-grow: 1;
+  }
+  
+  .logout-button {
+    background-color: #f44336; /* Red for Logout */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: #d32f2f; /* Darker Red on Hover */
+  }
+  

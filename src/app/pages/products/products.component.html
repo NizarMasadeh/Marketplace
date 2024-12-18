@@ -1,0 +1,21 @@
+<div class="products w-full flex flex-wrap gap-4">
+
+    <div class="product-card" *ngFor="let product of products">
+        <div class="product-image">
+            <img [src]="product.mainImage" alt="iPhone 9 Pro Max">
+            <span class="product-badge">New</span>
+        </div>
+        <div class="product-details">
+            <h2 class="product-title">{{product.title}}</h2>
+            <p class="product-description">{{product.description}}</p>
+            <div class="product-meta">
+                <span class="product-category">{{product.category}}</span>
+            </div>
+            <div class="product-price-stock">
+                <span class="price">${{product.price}}</span>
+                <span class="stock">{{product.stock}} in stock</span>
+            </div>
+            <button pButton class="flex justify-content-center w-full add-to-cart-btn">Add to Cart</button>
+        </div>
+    </div>
+</div>

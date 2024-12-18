@@ -1,0 +1,154 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '80vw', maxWidth: '1200px' }" header="Add New Product"
+    (onHide)="closeDialog()">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid p-fluid">
+        <div class="col-12 md:col-8">
+            <div class="card">
+                <h5 class="text-primary">General Product Information</h5>
+
+                <div class="grid formgrid">
+                    <div class="col-12 md:col-6">
+                        <div class="field">
+                            <label for="title">Product Name</label>
+                            <input id="title" type="text" pInputText formControlName="title"
+                                placeholder="Enter product name" />
+                            <small *ngIf="f['title'].invalid && (f['title'].dirty || f['title'].touched)"
+                                class="p-error">
+                                Product name is required (min 3 characters)
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="field">
+                            <label for="category">Category</label>
+                            <p-dropdown id="category" [options]="categories" optionLabel="name" optionValue="code"
+                                formControlName="category" placeholder="Select a category"></p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="field">
+                            <label for="description">Product Description</label>
+                            <textarea id="description" pInputTextarea formControlName="description" rows="4"
+                                placeholder="Describe your product"></textarea>
+                            <small
+                                *ngIf="f['description'].invalid && (f['description'].dirty || f['description'].touched)"
+                                class="p-error">
+                                Description is required (min 10 characters)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <h5 class="text-primary">Product Details</h5>
+                <div class="grid formgrid">
+                    <div class="col-12 md:col-4">
+                        <div class="field">
+                            <label for="price">Price</label>
+                            <p-inputNumber id="price" formControlName="price" mode="currency" currency="USD"
+                                placeholder="Enter price"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="field">
+                            <label for="stock">Stock Quantity</label>
+                            <p-inputNumber id="stock" formControlName="stock" [min]="0"
+                                placeholder="Enter stock quantity"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="field">
+                            <label for="countryOfOrigin">Country of Origin</label>
+                            <p-dropdown [options]="countries" [optionLabel]="'country'" [optionValue]="'country'"
+                                formControlName="countryOfOrigin" [filter]="true" placeholder="Select a country"
+                                (onChange)="onCountryChange($event)">
+                                <ng-template let-country pTemplate="item">
+                                    <div class="country-item">
+                                        <img class="country-flag w-1 h-1 mr-4"
+                                            [src]="'https://flagcdn.com/' + country.code + '.svg'"
+                                            alt="{{country.country}}" />
+                                        <span class="country-name">{{country.country}}</span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="field">
+                            <label for="sizes">Available Sizes</label>
+                            <p-multiSelect id="sizes" [options]="sizeOptions" optionLabel="name" optionValue="code"
+                                formControlName="sizes" placeholder="Select sizes"></p-multiSelect>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <h5 class="text-primary">Optional Details</h5>
+                <div class="grid formgrid">
+                    <div class="col-12 md:col-6">
+                        <div class="field">
+                            <label for="discount">Discount (%)</label>
+                            <p-inputNumber id="discount" formControlName="discount" [min]="0" [max]="100"
+                                placeholder="Enter discount percentage"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="field">
+                            <label for="specifications">Additional Specifications</label>
+                            <textarea id="specifications" pInputTextarea formControlName="specifications" rows="3"
+                                placeholder="Enter any additional product specifications"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-4">
+            <div class="card">
+                <h5 class="text-primary">Product Images</h5>
+
+                <div class="field">
+                    <label>Main Product Image</label>
+
+                    <!-- Button to trigger file input -->
+                    <button pButton icon="pi pi-plus" label="Upload Main Image" [loading]="uploadingImages"
+                        (click)="fileInput.click()"></button>
+
+                    <!-- Hidden file input to select image -->
+                    <input #fileInput type="file" accept="image/*" style="display: none"
+                        (change)="onMainImageUpload($event); $event.stopPropagation()" />
+
+                    <div *ngIf="uploadingImages" class="mt-2 image-preview">
+                        <p-skeleton width="25rem" height="20rem"></p-skeleton>
+                    </div>
+                    <div *ngIf="mainImagePreview" [hidden]="uploadingImages" class="mt-2 image-preview">
+                        <img [src]="mainImagePreview" (load)="loadMainImg()" class="w-full" [@fadeAnimation]
+                        [@.disabled]="uploadingImages"/>
+                        <button pButton icon="pi pi-times"
+                            class="p-button-danger p-button-rounded p-button-text absolute top-0 right-0"
+                            (click)="removeMainImage()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex justify-content-end gap-2">
+                <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text p-button-secondary"
+                    (click)="closeDialog()"></p-button>
+                <p-button label="Add Product" type="submit" icon="pi pi-check"
+                    [disabled]="productForm.invalid || isSubmitting || uploadingImages"
+                    [loading]="isSubmitting"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+<p-toast position="top-right"></p-toast>

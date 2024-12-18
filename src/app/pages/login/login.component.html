@@ -1,0 +1,49 @@
+<div class="wrapper">
+  <div class="session">
+    <div class="left" [ngClass]="isDarkMode ? 'left-light' : 'left-dark'">
+      <img src="/assets/images/logowhite.png" alt="Crate & Barrel Logo" class="logo"
+        [ngClass]="!isDarkMode ? '' : 'logo-inverted'">
+
+      <!-- <div class="logo flex flex-column gap-3">
+        <div class="bag flex justify-content-center align-items-center">
+          <i class="pi pi-shopping-bag text-5xl"></i>
+        </div>
+        <div class="texts flex flex-column justify-content-center text-center">
+          <span class="logo-text">Marty Cart</span>
+          <p>Your Place</p>
+        </div>
+      </div> -->
+    </div>
+    <form class="log-in" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="formContainer">
+        <div class="loginSec">
+          <div class="title">
+            <h4>Welcome Back</h4>
+            <p>Log in to your account to view today's offers:</p>
+          </div>
+          <div class="inputs">
+            <div class="form-wrapper">
+              <p-floatLabel>
+                <input id="email" type="email" pInputText formControlName="email" />
+                <label for="email">Email</label>
+              </p-floatLabel>
+            </div>
+            <div class="form-wrapper">
+              <p-floatLabel>
+                <input id="password" type="password" pInputText formControlName="password" />
+                <label for="password">Password</label>
+              </p-floatLabel>
+            </div>
+          </div>
+        </div>
+        <div class="btn">
+          <button pButton type="submit" [disabled]="loginForm.invalid" [label]="isLoggingIn ? 'Logging in...' : 'Login'"
+            [loading]="isLoggingIn"></button>
+        </div>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p-toast></p-toast>

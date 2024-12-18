@@ -1,0 +1,249 @@
+/* Global Variables */
+:root {
+    --primary-color: #3b82f6;
+    --secondary-color: #10b981;
+    --background-color: #f9fafb;
+    --text-color: #374151;
+    --border-color: #e5e7eb;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+}
+
+/* Navbar Styles */
+.dashboard-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-toggle {
+    margin-right: 1rem;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.dashboard-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.logout-btn {
+    border-radius: 0.375rem;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out !important;
+}
+
+.metric-card:hover {
+    background-color: var(--surface-hover);
+}
+
+
+.metric-icon {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+}
+
+.metric-sales .metric-icon {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.metric-orders .metric-icon {
+    background-color: #f43f5e;
+    color: white;
+}
+
+.metric-customers .metric-icon {
+    background-color: #10b981;
+    color: white;
+}
+
+.metric-revenue .metric-icon {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.metric-icon i {
+    font-size: 1.75rem;
+}
+
+.metric-details {
+    flex-grow: 1;
+}
+
+.metric-title {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.metric-trend {
+    font-size: 0.875rem;
+}
+
+.metric-trend.positive {
+    color: #10b981;
+}
+
+.metric-trend.negative {
+    color: #ef4444;
+}
+
+/* Charts Section */
+.charts-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background-color: var(--surface-card);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.1);
+    transition: .3s ease-in-out;
+    border: 1px solid var(--surface-border);
+}
+
+.chart-container:hover {
+    box-shadow: 0 4px 6px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header h2 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    color: var(--highlight-text-color);
+}
+
+/* Transactions Table */
+.transactions-section {
+    background-color: var(--surface-card);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--surface-border);
+}
+
+.transactions-header h2 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    color: var(--highlight-text-color);
+}
+
+.transaction-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+}
+
+.status-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-pending {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.status-failed {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+
+    .metrics-grid,
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.charts-group {
+    display: flex;
+}
+
+@media (max-width: "1200px") {
+    .charts-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pie, .bar, .line {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+    .line-container {
+        width: 100% !important;
+    }
+
+    .pie-container {
+        width: 100% !important;
+    }
+}
+
+.pieDiv, .barDiv {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.pieDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.barDiv {
+    
+}

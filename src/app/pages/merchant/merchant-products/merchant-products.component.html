@@ -1,0 +1,140 @@
+<div class="container mt-4">
+
+    <p-button (onClick)="addProduct()" icon="pi pi-plus"></p-button>
+    <div *ngIf="!isLoading && products?.length > 0" class="products w-full flex flex-wrap gap-8 mt-5">
+
+
+        <div class="product-card" *ngFor="let product of products; let i = index" [@fadeAnimation]
+            [@.disabled]="!products.length">
+            <div class="product-image">
+                <div class="img-container">
+                    <img [src]="product.mainImage" [alt]="product.title">
+                    <span class="product-badge new" *ngIf="isNewProduct(product)">New</span>
+                </div>
+            </div>
+
+            <div class="product-info">
+                <div class="product-details">
+                    <h4 class="product-title">{{ product.title }}</h4>
+                    <p class="product-brand">{{ product.brand }}</p>
+                    <p class="product-price">
+                        <span class="discount-price">${{ product.price }}</span>
+                        <span *ngIf="product.discount" class="original-price">
+                            ${{ calculateOriginalPrice(product.price, product.discount) }}
+                        </span>
+                    </p>
+                </div>
+
+                <div class="product-rating">
+                    <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                        <i [ngClass]="{
+                        'pi pi-star-fill': i < product.rating,
+                        'pi pi-star': i >= product.rating
+                    }"></i>
+                    </span>
+                </div>
+
+                <div class="action-buttons">
+                    <div class="color-options">
+                        <span class="color-circle" style="background-color: #4CAF50;"></span>
+                        <span class="color-circle" style="background-color: #03A9F4;"></span>
+                        <span class="color-circle" style="background-color: #FFC107;"></span>
+                        <span class="color-circle" style="background-color: #F44336;"></span>
+                    </div>
+                    <button class="add-to-cart">
+                        <i class="pi pi-cart-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="!isLoading && products?.length === 0"
+        class="no-products h-30rem flex justify-content-center align-items-center">
+        <p>You have no products!</p>
+    </div>
+
+    <div *ngIf="isLoading" class="products w-full flex flex-wrap gap-8 mt-5">
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton height="20rem" width="15rem" borderRadius="16px"></p-skeleton>
+    </div>
+
+    <!-- <div class="product-card" *ngFor="let product of products">
+            <div class="product-image">
+                <img [src]="product.mainImage" [alt]="product.title">
+                <div class="product-badges">
+                    <span class="product-badge new" *ngIf="isNewProduct(product)">New</span>
+                    <span class="product-badge discount" *ngIf="product.discount">
+                        -{{product.discount}}%
+                    </span>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="product-header">
+                    <h2 class="product-title">{{product.title}}</h2>
+                    <div class="product-rating">
+                        <ng-container *ngFor="let rating of product.rating">
+                            <span *ngIf="rating.five">
+                                <i class="pi pi-star-fill"></i> {{rating.five}}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <p class="product-description">{{product.description}}</p>
+
+                <div class="product-meta">
+                    <span class="product-category">{{product.category}}</span>
+                    <span class="product-origin">{{product.countryOfOrigin}}</span>
+                </div>
+
+                <div class="product-colors">
+                    <div class="color-options">
+                        <div *ngFor="let color of product.prodColors" class="color-dot"
+                            [style.background-color]="color.color" [title]="color.color_name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-price-stock">
+                    <div class="price-container">
+                        <span class="original-price" *ngIf="product.discount">
+                            ${{calculateOriginalPrice(product.price, product.discount)}}
+                        </span>
+                        <span class="price">${{product.price}}</span>
+                    </div>
+                    <span class="stock" [ngClass]="{
+                            'low-stock': product.stock < 10,
+                            'out-of-stock': product.stock === 0
+                        }">
+                        {{product.stock}} in stock
+                    </span>
+                </div>
+
+                <div class="product-actions">
+                    <button pButton class="add-to-cart-btn" [disabled]="product.stock === 0">
+                        <i class="pi pi-shopping-cart mr-2"></i>
+                        {{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}}
+                    </button>
+                    <button pButton class="wishlist-btn" icon="pi pi-heart"></button>
+                </div>
+
+                <div class="product-tags">
+                    <span class="tag" *ngFor="let tag of product.tags">
+                        {{tag}}
+                    </span>
+                </div>
+            </div>
+        </div> -->
+</div>
+
+<app-merchant-add-product [(visible)]="addProductDialog" (visibleChange)="addProductDialog = false"
+    (productAdded)="getMerchantProducts()"></app-merchant-add-product>

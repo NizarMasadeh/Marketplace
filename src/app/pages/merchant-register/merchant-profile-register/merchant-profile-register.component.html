@@ -1,0 +1,97 @@
+<div class="container flex justify-content-center align-items-center">
+    <div class="form-v6-content">
+        <div class="form-left relative">
+            <img src="/assets/images/merchantRegg.png" alt="form">
+            <div class="title">
+                <span>Merchant profile registeration</span>
+            </div>
+        </div>
+        <form class="form-detail" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="field mb-5 pfpImage">
+
+                <fieldset class="profileFrame flex justify-content-center align-items-center gap-3 square">
+                    <legend>Upload section</legend>
+                    <div class="profile-container">
+                        <label>Profile image</label>
+
+                        <div *ngIf="!previewPfp && !isPfpImgUploading" [hidden]="isPfpImgUploading" class="dotted square" (click)="pfpInput.click()">
+                            <i class="pi pi-camera camera"></i>
+                        </div>
+                    
+                        <div *ngIf="isPfpImgUploading || previewPfp" [hidden]="!isPfpImgUploading" class="dotted square relative">
+                            <span [hidden]="!isPfpImgUploading" class="uploading-text">Uploading...</span>
+                            <p-skeleton [hidden]="!isPfpImgUploading" width="9rem" height="9rem" shape="square"></p-skeleton>
+                            <img [src]="previewPfp" [hidden]="isPfpImgUploading" (load)="loadPfpImage()" class="h-full w-full border-square bg-cover" style="object-fit: cover;">
+                            <div *ngIf="previewPfp" [hidden]="isPfpImgUploading" class="delete-btn" (click)="removePfpImage()">
+                                <i class="pi pi-times text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="profile-container">
+                        <label>Background image</label>
+                        <div *ngIf="!previewBg && !isBgImgUploading" [hidden]="isBgImgUploading" class="dotted square"
+                            (click)="bgInput.click()">
+                            <i class="pi pi-camera camera"></i>
+                        </div>
+                    
+                        <div *ngIf="isBgImgUploading || previewBg" [hidden]="!isBgImgUploading" class="dotted square relative">
+                            <span [hidden]="!isBgImgUploading" class="uploading-text">Uploading...</span>
+                            <p-skeleton [hidden]="!isBgImgUploading" width="9rem" height="9rem" shape="square"></p-skeleton>
+                            <img [src]="previewBg" [hidden]="isBgImgUploading" (load)="loadBgImage()" class="h-full w-full square bg-cover"
+                                style="object-fit: cover;">
+                            <div *ngIf="previewBg" [hidden]="isBgImgUploading" class="delete-btn" (click)="removeBgImage()">
+                                <i class="pi pi-times text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <input #pfpInput type="file" accept="image/*" style="display: none"
+                    (change)="onPfpImgUpload($event); $event.stopPropagation()" />
+
+                <input #bgInput type="file" accept="image/*" style="display: none"
+                    (change)="onBgImgUpload($event); $event.stopPropagation()" />
+            </div>
+
+            <div class="inputs flex flex-column gap-2">
+                <div class="field flex flex-column gap-2">
+                    <label for="country">Country of Origin</label>
+                    <p-dropdown [options]="countries" [optionLabel]="'country'"
+                        formControlName="country" [filter]="true" placeholder="Select a country"
+                        (onChange)="onCountryChange($event)">
+                        <ng-template let-country pTemplate="item">
+                            <div class="country-item">
+                                <img class="country-flag w-1 h-1 mr-4"
+                                    [src]="'https://flagcdn.com/' + country.code + '.svg'"
+                                    alt="{{country.country}}" />
+                                <span class="country-name">{{country.country}}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="form-wrapper">
+                    <p-floatLabel>
+                        <input id="commercial_number" type="text" pInputText formControlName="commercial_number" />
+                        <label for="commercial_number">Commercial number</label>
+                    </p-floatLabel>
+                </div>
+                <div class="form-wrapper">
+                    <p-floatLabel>
+                        <input id="national_number" type="text" pInputText formControlName="national_number" />
+                        <label for="national_number">National number</label>
+                    </p-floatLabel>
+                </div>
+            </div>
+
+            <div class="footer mt-3">
+                <div class="btn flex justify-content-end">
+                    <p-button [disabled]="isFormValid()" type="submit"
+                        [label]="isRegistering ? 'Registering...' : 'Create account'" [loading]="isRegistering" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <p-toast></p-toast>

@@ -1,0 +1,10 @@
+<!-- <div class="menu-bar">
+    <p-tabMenu [model]="items" />
+</div> -->
+
+<app-sidenav-merchant (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
+
+<app-merchant-portal
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+></app-merchant-portal>

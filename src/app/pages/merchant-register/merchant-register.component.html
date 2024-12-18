@@ -1,0 +1,86 @@
+<div class="wrapper">
+    <div class=" inner">
+        <form class="flex flex-column gap-3" style="margin-bottom: 2rem;" [formGroup]="registerForm"
+            (ngSubmit)="onSubmit()">
+            <h3>Registration Form</h3>
+            <div class="form-wrapper">
+                <p-floatLabel>
+                    <input id="fullName" type="text" pInputText formControlName="fullName" />
+                    <label for="fullName">Full name</label>
+                </p-floatLabel>
+            </div>
+            <div class="form-wrapper">
+                <p-floatLabel>
+                    <input id="email" type="email" pInputText formControlName="email" />
+                    <label for="email">Email</label>
+                </p-floatLabel>
+            </div>
+
+            <div class="form-wrapper">
+                <p-dropdown [options]="countries" [optionLabel]="'country'"
+                    formControlName="country" [filter]="true" [style]="{width: '100%'}" placeholder="Select a country"
+                    (onChange)="onCountryChange($event)">
+                    <ng-template let-country pTemplate="item">
+                        <div class="country-item">
+                            <img class="country-flag w-1 h-1 mr-4"
+                                [src]="'https://flagcdn.com/' + country.code + '.svg'" alt="{{country.country}}" />
+                            <span class="country-name">{{country.country}}</span>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="form-wrapper relative">
+                <p-floatLabel>
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" pInputText
+                        formControlName="password" class="pr-8" />
+                    <label for="password">Password</label>
+                </p-floatLabel>
+                <div class="eyeBtn cursor-pointer" (click)="togglePasswordVisibility()">
+                    <i class="pi pi-eye"></i>
+                </div>
+                <!-- <small
+                    *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
+                    class="p-error">
+                    Password is required
+                </small> -->
+                <small
+                    *ngIf="registerForm.get('password')?.hasError('passwordComplexity') && registerForm.get('password')?.touched"
+                    class="p-error">
+                    <!-- <div *ngIf="registerForm.get('password')?.errors?.['passwordComplexity'] as complexity">
+                        Password must:
+                        <ul>
+                            <li *ngIf="!complexity.lengthValid">Be at least 6 characters long</li>
+                            <li *ngIf="!complexity.numberValid">Contain at least 1 number</li>
+                            <li *ngIf="!complexity.specialCharValid">Contain at least 1 special character</li>
+                        </ul>
+                    </div> -->
+                </small>
+            </div>
+
+            <div class="form-wrapper relative">
+                <p-floatLabel>
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" pInputText
+                        formControlName="confirmPassword" class="pr-8" />
+                    <label for="confirmPassword">Confirm password</label>
+                </p-floatLabel>
+                <div class="eyeBtn cursor-pointer" (click)="toggleConfirmPasswordVisibility()">
+                    <i class="pi pi-eye"></i>
+                </div>
+                <!-- <small
+                    *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+                    class="p-error">
+                    Passwords must match
+                </small> -->
+            </div>
+
+            <div class="footer">
+                <div class="btn">
+                    <p-button [disabled]="isFormValid()" type="submit"
+                        [label]="isRegistering ? 'Registering...' : 'Create account'" [loading]="isRegistering" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-toast></p-toast>

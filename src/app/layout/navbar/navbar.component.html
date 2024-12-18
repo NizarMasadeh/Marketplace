@@ -1,0 +1,82 @@
+<header class="header" [@fadeAnimation] [@.disabled]="isThemeLoading">
+    <div class="top-bar">
+        <div class="search-container">
+            <input type="text" placeholder="What can we help you find?" class="search-input">
+            <button class="search-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="logo">
+            <span (click)="goHome()">Marty Cart</span>
+        </div>
+        <div class="user-actions">
+            <label for="themeToggle" class="themeToggle st-sunMoonThemeToggleBtn" type="checkbox">
+                <input type="checkbox" id="themeToggle" class="themeToggleInput" [(ngModel)]="isDarkMode"
+                    (change)="toggleLightDark()" />
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" stroke="none">
+                    <g>
+                        <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
+                        <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
+                        <circle class="sunRay sunRay3" cx="6" cy="16.928" r="1.5"></circle>
+                        <circle class="sunRay sunRay4" cx="2" cy="10" r="1.5"></circle>
+                        <circle class="sunRay sunRay5" cx="6" cy="3.1718" r="1.5"></circle>
+                        <circle class="sunRay sunRay6" cx="14" cy="3.1718" r="1.5"></circle>
+                    </g>
+                    <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask)"></circle>
+                    <mask id="moon-mask">
+                        <rect x="0" y="0" width="20" height="20" fill="white"></rect>
+                        <circle cx="11" cy="3" r="8" fill="black"></circle>
+                    </mask>
+                </svg>
+            </label>
+
+            <a routerLink="/login" class="action-link action-link-a">Orders & Sign In</a>
+            <a href="#" class="action-link">
+                <i class="pi pi-heart"></i>
+                <span class="count">0</span>
+            </a>
+            <a href="#" class="action-link">
+                <i class="pi pi-shopping-cart"></i>
+                <span class="count">2</span>
+            </a>
+            <div class="profile flex justify-content-center align-items-center">
+                <p-toast />
+                <p-menu #menu [model]="items" [popup]="true" />
+                <button pButton class="profBtn" (click)="showSideBar()"
+                    [icon]="isAdmin ? 'pi pi-align-justify' : 'pi pi-user'"></button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="secondary-nav">
+        <ul>
+            <li><a href="#">WEDDING REGISTRY</a></li>
+            <li><a href="#">FREE DESIGN SERVICES</a></li>
+            <li><a href="#">TRADE PROGRAM</a></li>
+            <li><a href="#">INSPIRATION</a></li>
+            <li><a href="#">COLLABORATIONS</a></li>
+            <li><a href="#">IN-STOCK</a></li>
+        </ul>
+    </nav>
+
+    <nav class="main-nav" [ngClass]="isDarkMode ? 'lightMode' : 'darkMode'">
+        <ul>
+            <li><a href="#">Furniture</a></li>
+            <li><a href="#">Outdoor</a></li>
+            <li><a href="#">Tabletop & Bar</a></li>
+            <li><a href="#">Kitchen</a></li>
+            <li><a href="#">Decor & Pillows</a></li>
+            <li><a href="#">Rugs</a></li>
+            <li><a href="#">Lighting</a></li>
+            <li><a href="#">Bedding & Bath</a></li>
+            <li><a href="#">Gifts</a></li>
+            <li><a href="#">Sale</a></li>
+            <li><a href="#">&kids</a></li>
+        </ul>
+    </nav>
+</header>
+
+<app-sidebar [sideBarVisible]="sideBarVisible" (isSideBarHidden)="hideSideBar()"></app-sidebar>

@@ -1,0 +1,8 @@
+<!-- <div class="menu-bar">
+    <p-tabMenu [model]="items" />
+</div> -->
+    <app-sidenav-admin (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-admin>
+
+    <app-admin-portal [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-admin-portal>
+
+    <p-toast></p-toast>

@@ -1,0 +1,300 @@
+// Import PrimeNG's base styles (not the theme)
+@import "primeng/resources/primeng.css";
+
+:root {
+    // Base colors
+    --background: #ffffff;
+    --foreground: #000000;
+
+    // Card and popover colors
+    --card: #f5f5f5;
+    --card-foreground: #000000;
+    --popover: #f5f5f5;
+    --popover-foreground: #000000;
+
+    // Primary colors
+    --primary: #000000;
+    --primary-foreground: #ffffff;
+
+    // Secondary colors
+    --secondary: #e0e0e0;
+    --secondary-foreground: #000000;
+
+    // Severity colors
+    --success: #e6f3e6;
+    --success-foreground: #005200;
+    --danger: #f3e6e6;
+    --danger-foreground: #520000;
+    --warning: #f3f0e6;
+    --warning-foreground: #523f00;
+    --info: #e6f0f3;
+    --info-foreground: #003652;
+
+    // Muted colors
+    --muted: #f0f0f0;
+    --muted-foreground: #6b6b6b;
+
+    // Accent colors
+    --accent: #d0d0d0;
+    --accent-foreground: #000000;
+
+    // Border and input colors
+    --border: #a0a0a0;
+    --input: #ffffff;
+    --ring: #000000;
+
+    // Additional custom variables
+    --hover-color: #e5e5e5;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
+    --header: #f0f0f0;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.p-component {
+    color: var(--foreground);
+}
+
+
+.p-button {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+
+    &:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+        color: var(--foreground)
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+
+    &.p-button-success {
+        background-color: var(--success);
+        border-color: var(--success-foreground);
+        color: var(--success-foreground);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--success) 80%, black);
+            border-color: var(--success-foreground);
+        }
+    }
+
+    &.p-button-danger {
+        background-color: var(--danger);
+        border-color: var(--danger-foreground);
+        color: var(--danger-foreground);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--danger) 80%, black);
+            border-color: var(--danger-foreground);
+        }
+    }
+
+    &.p-button-warning {
+        background-color: var(--warning);
+        border-color: var(--warning-foreground);
+        color: var(--warning-foreground);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--warning) 80%, black);
+            border-color: var(--warning-foreground);
+        }
+    }
+
+    &.p-button-info {
+        background-color: var(--info);
+        border-color: var(--info-foreground);
+        color: var(--info-foreground);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--info) 80%, black);
+            border-color: var(--info-foreground);
+        }
+    }
+
+}
+
+.p-button.p-button-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--secondary-foreground);
+
+    &:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+    }
+}
+
+.p-card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    box-shadow: 0px 4px 8px var(--shadow-color);
+}
+
+.p-inputtext {
+    background-color: var(--input);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+
+    &:focus {
+        border-color: var(--ring);
+        box-shadow: 0 0 4px 1px var(--ring), 0 0 6px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.p-menu {
+    background-color: var(--popover);
+    border: 1px solid var(--border);
+
+    .p-menuitem-link {
+        color: var(--popover-foreground);
+
+        &:hover {
+            background-color: var(--hover-color);
+        }
+    }
+
+    .p-submenu-header {
+        background-color: var(--header);
+    }
+}
+
+.p-dropdown {
+    background-color: var(--input);
+    border-color: var(--border);
+
+    .p-dropdown-label {
+        color: var(--foreground);
+    }
+
+    &:not(.p-disabled):hover {
+        border-color: var(--ring);
+    }
+
+    &:not(.p-disabled).p-focus {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+}
+
+.p-dropdown-panel {
+    background-color: #f5f5f5;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-focus {
+    background-color: #e0e0e0;
+}
+
+.p-dialog {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    box-shadow: 0px 4px 8px var(--shadow-color);
+
+    .p-dialog-header {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .p-dialog-content {
+        background-color: var(--card);
+        color: var(--card-foreground);
+    }
+}
+
+.p-table {
+    background-color: var(--card);
+    color: var(--card-foreground);
+
+    .p-datatable-header {
+        background-color: var(--card);
+        border-color: var(--border);
+    }
+
+    .p-datatable-thead>tr>th {
+        background-color: var(--secondary);
+        color: var(--secondary-foreground);
+        border-color: var(--border);
+    }
+
+    .p-datatable-tbody>tr {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border-color: var(--border);
+
+        &:hover {
+            background-color: var(--hover-color);
+        }
+    }
+}
+
+.p-paginator {
+    background-color: var(--card);
+    color: var(--card-foreground);
+
+    .p-paginator-page {
+        &.p-highlight {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+    }
+}
+
+.p-checkbox {
+    .p-checkbox-box {
+        background-color: var(--input);
+        border-color: var(--border);
+
+        &.p-highlight {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+    }
+}
+
+.p-radiobutton {
+    .p-radiobutton-box {
+        background-color: var(--input);
+        border-color: var(--border);
+
+        &.p-highlight {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+    }
+}
+
+.p-message {
+    &.p-message-success {
+        background-color: var(--success);
+        color: var(--success-foreground);
+        border-color: var(--success-foreground);
+    }
+
+    &.p-message-danger {
+        background-color: var(--danger);
+        color: var(--danger-foreground);
+        border-color: var(--danger-foreground);
+    }
+
+    &.p-message-warning {
+        background-color: var(--warning);
+        color: var(--warning-foreground);
+        border-color: var(--warning-foreground);
+    }
+
+    &.p-message-info {
+        background-color: var(--info);
+        color: var(--info-foreground);
+        border-color: var(--info-foreground);
+    }
+}

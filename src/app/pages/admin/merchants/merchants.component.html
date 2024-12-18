@@ -1,0 +1,52 @@
+<div class="container mt-3">
+
+    <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" *ngIf="!isLoading"
+        [@fadeAnimation] [@.disabled]="isLoading">
+        @for (merchant of merchants; track merchant.id) {
+
+        <div class="merchant-card">
+            <div class="merchant-card-header relative">
+                <div class="dark-overlay">
+                    <img [src]="merchant.merchant_bg" alt="Banner" class="banner-image" />
+                </div>
+                <span class="status-badge" [ngClass]="merchant.status === 'Active' ? 'badge-active' : merchant.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
+                    {{merchant.status}}
+                </span>
+                <div *ngIf="merchant?.country?.flag" class="flagimg">
+                    <img [src]="'https://flagcdn.com/' + merchant?.country?.code + '.svg'" height="20px" width="20px" class="flag" alt="">
+                </div>
+            </div>
+            <div class="merchant-card-body relative">
+                <div class="merchant-avatar" [ngClass]="merchant.status === 'Active' ? 'border-active' : merchant.status === 'InActive' ? 'border-inactive' : 'border-pending'">
+                    <img [src]="merchant.merchant_logo" alt="Avatar" />
+                </div>
+                <div class="merchant-details">
+                    <h2 class="merchant-name">{{merchant.full_name}}</h2>
+                    <div class="location flex justify-content-center align-items-center gap-2">
+                        <i class="pi pi-map-marker"></i>
+                        <p class="merchant-location">{{merchant?.country?.country || 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="merchant-actions">
+                    <p-button [severity]="merchant.status === 'Active' ? 'danger' : 'success'" [label]="merchant.status === 'Active' ? 'Deactivate' : 'Activate'" 
+                    (onClick)="onUpdateMerchant(merchant)" [loading]="isUpdating"></p-button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div *ngIf="isLoading" class="skeleton-container">
+        <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" [@fadeAnimation]>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+        </div>
+    </div>
+</div>
+
+<p-toast />
+<p-confirmDialog />

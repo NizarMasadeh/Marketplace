@@ -1,0 +1,99 @@
+<p-dialog [visible]="visible" (visibleChange)="visibleChange.emit($event)" (onHide)="closeDialog()" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '80vw', maxWidth: '600px', height: 'auto' }"
+    [draggable]="false" [resizable]="false" styleClass="store-creation-dialog">
+    <ng-template pTemplate="header">
+        <div class="header-container flex align-items-center justify-content-between">
+            <h2 class="m-0 text-primary">Create New Store</h2>
+        </div>
+    </ng-template>
+
+    <form [formGroup]="storeForm" (ngSubmit)="createStore()" class="p-fluid">
+        <div class="form-section grid formgrid p-4">
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label for="storeName" class="font-bold">Store Name</label>
+                    <input id="storeName" type="text" pInputText formControlName="name" placeholder="Enter store name"
+                        class="w-full" />
+                    <small *ngIf="storeForm.get('name')?.invalid && storeForm.get('name')?.touched" class="p-error">
+                        Store name is required
+                    </small>
+                </div>
+                <div class="field">
+                    <label for="reg_number" class="font-bold">Registeration Number</label>
+                    <p-inputNumber inputId="withoutgrouping" pInputNumber formControlName="reg_number"
+                        placeholder="Reg number..." class="w-full" />
+                    <small *ngIf="storeForm.get('reg_number')?.invalid && storeForm.get('reg_number')?.touched"
+                        class="p-error">
+                        Registeration number is required
+                    </small>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label for="storeName" class="font-bold">Store Location</label>
+                    <p-dropdown [options]="countries" [optionLabel]="'country'"
+                        formControlName="location" [filter]="true" [style]="{width: '100%'}"
+                        placeholder="Select a country" (onChange)="onCountryChange($event)">
+                        <ng-template let-country pTemplate="item">
+                            <div class="country-item">
+                                <img class="country-flag w-1 h-1 mr-4"
+                                    [src]="'https://flagcdn.com/' + country.code + '.svg'" alt="{{country.country}}" />
+                                <span class="country-name">{{country.country}}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="storeName" class="font-bold">Store categoies</label>
+                    <p-multiSelect id="categories" [options]="categories" optionLabel="name" optionValue="code"
+                        formControlName="categories" placeholder="Select categories"
+                        (onChange)="showForm()"></p-multiSelect>
+                </div>
+            </div>
+        </div>
+
+        <div class="images-section flex justify-content-center gap-6">
+            <!-- Store Logo -->
+            <div class="image-upload">
+                <h3>Store Logo</h3>
+                <div class="image-container">
+                    <button *ngIf="!storeLogo" pButton severity="primary" type="button" [loading]="isImgUploading"
+                        icon="pi pi-image" class="upload-button" (click)="imageInput.click()">
+                        <input #imageInput type="file" class="hidden" (change)="onStoreLogoSelect($event)"
+                            accept="image/*" />
+                    </button>
+                    <div *ngIf="storeLogo" class="preview-container">
+                        <img [src]="storeLogo" class="preview-image" alt="Store Logo" />
+                        <button pButton class="delete-button" icon="pi pi-trash" type="button"
+                            (click)="removeStoreLogo()"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Background -->
+            <div class="image-upload">
+                <h3>Store Background</h3>
+                <div class="image-container">
+                    <button *ngIf="!storeBg" pButton severity="primary" type="button" [loading]="isImgUploading"
+                        icon="pi pi-image" class="upload-button" (click)="bgInput.click()">
+                        <input #bgInput type="file" class="hidden" (change)="onStoreBgSelect($event)"
+                            accept="image/*" />
+                    </button>
+                    <div *ngIf="storeBg" class="preview-container">
+                        <img [src]="storeBg" class="preview-image" alt="Store Background" />
+                        <button pButton class="delete-button" icon="pi pi-trash" type="button"
+                            (click)="removeStoreBg()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dialog-footer flex justify-content-end gap-2 p-4">
+            <p-button label="Cancel" severity="secondary" (onClick)="closeDialog()" type="button"></p-button>
+            <p-button [label]="isSubmiting ? 'Creating Store...' : 'Create Store'" [loading]="isSubmiting" type="submit"
+                [disabled]="storeForm.invalid"></p-button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-toast></p-toast>
