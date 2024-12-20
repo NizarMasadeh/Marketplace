@@ -116,6 +116,10 @@ export class MerchantStoreComponent implements OnInit {
     ]
   }
 
+  closeDialog() {
+    this.createStoreDialog = false;
+  }
+  
   getStores() {
     this.isLoading = true;
     this.isTextLoading = true;
@@ -123,8 +127,8 @@ export class MerchantStoreComponent implements OnInit {
     if (this.isBrowser) {
       this._merchantService.getMerchantStores().subscribe(
         (res: any) => {
-          console.log(res);
-
+          console.log("stores: ", res);
+          
           if (res && res.stores && res.stores.length > 0) {
             this.stores = res.stores[0];
             localStorage.setItem('storeId', this.stores.id)

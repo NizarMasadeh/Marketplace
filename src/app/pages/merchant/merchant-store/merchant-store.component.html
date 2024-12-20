@@ -4,7 +4,7 @@
     <button pButton (click)="onCreateStore()" label="Create store"></button>
 </div>
 
-<app-merchant-create-store [(visible)]="createStoreDialog" (visibleChange)="getStores()"></app-merchant-create-store>
+<app-merchant-create-store [(visible)]="createStoreDialog" (visibleChange)="closeDialog()" (storeCreated)="getStores()"></app-merchant-create-store>
 
 <div class="store-container mt-3">
 

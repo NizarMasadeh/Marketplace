@@ -1,4 +1,4 @@
-<p-dialog [visible]="visible" (visibleChange)="visibleChange.emit($event)" (onHide)="closeDialog()" [modal]="true"
+<p-dialog [(visible)]="visible" (onHide)="closeDialog()" [modal]="true"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '80vw', maxWidth: '600px', height: 'auto' }"
     [draggable]="false" [resizable]="false" styleClass="store-creation-dialog">
     <ng-template pTemplate="header">

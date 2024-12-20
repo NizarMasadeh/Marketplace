@@ -4,7 +4,6 @@ import { ButtonModule } from 'primeng/button';
 import { fadeAnimation } from '../../widgets/animations/fade.animation';
 import { SkeletonModule } from 'primeng/skeleton';
 import { IpLocationService } from '../../services/IPLOCATION/ip-location.service';
-import { error } from 'console';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +11,7 @@ import { error } from 'console';
     CommonModule,
     ButtonModule,
     SkeletonModule
-  ],
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [fadeAnimation]

@@ -73,10 +73,14 @@ export class MerchantDataComponent implements OnChanges {
     this._adminService.getMerchantById(this.merchantData.id).subscribe({
       next: (res: any) => {
 
-        const merchantStoreId = res.merchants[0].stores[0].id
         this.merchant = res.merchants[0];
-
+        
+        if(this.merchant.stores) {
+        const merchantStoreId = res.merchants[0]?.stores[0]?.id
         this.getMerchantStore(merchantStoreId);
+        } else {
+          this.merchantStores = null;
+        }
 
         this.isLoading = false;
         this._cdr.detectChanges();
@@ -155,7 +159,6 @@ export class MerchantDataComponent implements OnChanges {
       }, error: (error) => {
         console.error("Error fetching store: ", error);
         this.isStoresLoading = false;
-
       }
     })
   }

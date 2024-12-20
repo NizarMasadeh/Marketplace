@@ -51,6 +51,7 @@ export class MerchantCreateStoreComponent implements OnInit {
 
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() storeCreated = new EventEmitter<boolean>();
 
   storeForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -233,7 +234,7 @@ export class MerchantCreateStoreComponent implements OnInit {
           summary: 'Success',
           detail: 'Store created successfully'
         });
-        this.visibleChange.emit(false);
+        this.storeCreated.emit(false);
         this.closeDialog();
       },
       error: (error) => {
@@ -250,6 +251,8 @@ export class MerchantCreateStoreComponent implements OnInit {
   }
 
   closeDialog() {
+    console.log("Triggered");
+    
     this.storeForm.reset();
     this.selectedCountry = '';
     this.storeLogo = null;
@@ -257,5 +260,6 @@ export class MerchantCreateStoreComponent implements OnInit {
     this.selectedLogo = null;
     this.selectedBg = null;
     this.visible = false;
+    this.visibleChange.emit();
   }
 }

@@ -25,8 +25,7 @@
     <div *ngIf="sessionTimeOut" class=" flex flex-column justify-content-center align-items-center h-30rem">
         <h3 style="color: var(--gray-400);"> Session timeout, you have to login again!</h3>
         <div class="btn-container">
-            <p-button class="btn-hover" [loading]="isLoggingOut" [label]="isLoggingOut ? 'Logging out...' : 'Logout'"
-                [routerLink]="['/login']"></p-button>
+            <p-button class="btn-hover" label="Login" [routerLink]="['/login']"></p-button>
         </div>
     </div>
 
