@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { fadeAnimation } from '../../../../widgets/animations/fade.animation';
 import { AdminService } from '../../../../services/admin/admin.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-merchant-data',
@@ -23,7 +24,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputTextModule,
     ButtonModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './merchant-data.component.html',
   styleUrl: './merchant-data.component.scss',
@@ -34,7 +36,7 @@ export class MerchantDataComponent implements OnChanges {
   private isBrowser: boolean;
   @Input() visible = false;
   @Input() merchantData: any;
- 
+
   @Output() updated = new EventEmitter<boolean>();
   @Output() visibleChange = new EventEmitter<boolean>();
 
@@ -46,6 +48,8 @@ export class MerchantDataComponent implements OnChanges {
   statusText: any;
   successText: any;
   isMerchantUpdated = false;
+  merchantStores: any;
+  isStoresLoading = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -58,7 +62,7 @@ export class MerchantDataComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['merchantData'] && this.merchantData) {
+    if (changes['merchantData'] && this.merchantData) {
       this.isLoading = true;
       this.getMerchantData();
     }
@@ -68,7 +72,12 @@ export class MerchantDataComponent implements OnChanges {
     this.isLoading = true
     this._adminService.getMerchantById(this.merchantData.id).subscribe({
       next: (res: any) => {
+
+        const merchantStoreId = res.merchants[0].stores[0].id
         this.merchant = res.merchants[0];
+
+        this.getMerchantStore(merchantStoreId);
+
         this.isLoading = false;
         this._cdr.detectChanges();
       }, error: (error) => {
@@ -80,17 +89,17 @@ export class MerchantDataComponent implements OnChanges {
 
   onUpdateMerchant() {
     const merchantStatus = this.merchant.status;
-  
-    if(merchantStatus === 'Active') {
+
+    if (merchantStatus === 'Active') {
       this.status = 'InActive'
       this.statusText = 'Deactivate';
       this.successText = 'Deactivated';
-    } else if(merchantStatus === 'Pending' || merchantStatus === 'InActive') {
+    } else if (merchantStatus === 'Pending' || merchantStatus === 'InActive') {
       this.status = 'Active'
       this.statusText = 'Activate';
       this.successText = 'Activated';
-    } 
-  
+    }
+
     this._confirmationService.confirm({
       message: `Are you sure that you want to <b>${this.statusText}</b> ${this.merchant.full_name}?`,
       header: 'Confirmation',
@@ -103,7 +112,7 @@ export class MerchantDataComponent implements OnChanges {
         this._cdr.detectChanges();
         this.isUpdating = true;
         this.merchant = null;
-  
+
         this._adminService.updateMerchantStatus(this.merchantData.id, this.status).subscribe({
           next: () => {
             this.isLoading = true;
@@ -114,9 +123,9 @@ export class MerchantDataComponent implements OnChanges {
               summary: 'Success',
               detail: `${this.merchantData.full_name} got ${this.successText}`
             })
-            
+
             this.getMerchantData();
-          }, 
+          },
           error: (error) => {
             console.error("Error updating merchant status: ", error);
             this.isLoading = true;
@@ -135,9 +144,24 @@ export class MerchantDataComponent implements OnChanges {
     });
   }
 
+  getMerchantStore(storeId: any) {
+    this.isStoresLoading = true;
+    this._adminService.getMerchantStore(storeId).subscribe({
+      next: (res: any) => {
+        console.log("Merchant store: ", res);
+        this.merchantStores = res.stores;
+        this.isStoresLoading = false;
+
+      }, error: (error) => {
+        console.error("Error fetching store: ", error);
+        this.isStoresLoading = false;
+
+      }
+    })
+  }
   closeDialog() {
 
-    if(this.isMerchantUpdated) {
+    if (this.isMerchantUpdated) {
       this.updated.emit(true);
     }
 

@@ -35,24 +35,24 @@ export class AdminService {
   /***********************USERS*****************************/
 
   getAllUsers(): Observable<any> {
-    return this._httpClient.get(`${environment.server}users`, { headers: this.getHeaders()});
+    return this._httpClient.get(`${environment.server}users`, { headers: this.getHeaders() });
   }
 
   getUserById(userId: any): Observable<any> {
-    return this._httpClient.get(`${environment.server}users/profile?id=${userId}`, { headers: this.getHeaders()});
+    return this._httpClient.get(`${environment.server}users/profile?id=${userId}`, { headers: this.getHeaders() });
   }
 
   /***********************************************************/
 
 
   /***********************MERCHANTS*****************************/
-  
+
   getAllMerchants(): Observable<any> {
-    return this._httpClient.get(`${environment.server}merchants`, { headers: this.getHeaders()});
+    return this._httpClient.get(`${environment.server}merchants`, { headers: this.getHeaders() });
   }
 
   getMerchantById(merchantId: any): Observable<any> {
-    return this._httpClient.get(`${environment.server}merchants/profile?id=${merchantId}`, { headers: this.getHeaders()});
+    return this._httpClient.get(`${environment.server}merchants/profile?id=${merchantId}`, { headers: this.getHeaders() });
   }
 
   updateMerchantStatus(merchantId: any, status: any): Observable<any> {
@@ -60,7 +60,13 @@ export class AdminService {
       status: `${status}`
     }
 
-    return this._httpClient.patch(`${environment.server}merchants/profile?id=${merchantId}`, updatedData, { headers: this.getHeaders()});
+    return this._httpClient.patch(`${environment.server}merchants/profile?id=${merchantId}`, updatedData, { headers: this.getHeaders() });
+  }
+
+
+  getMerchantStore(storeId: any): Observable<any> {
+    const userId = localStorage.getItem('userId');
+    return this._httpClient.get(`${environment.server}stores?id=${storeId}`, { headers: this.getHeaders() });
   }
 
   /***********************************************************/
@@ -73,7 +79,7 @@ export class AdminService {
   }
 
   updateStore(storeId: any, storeData: any): Observable<any> {
-      return this._httpClient.put(`${environment.server}stores?id=${storeId}`, storeData, { headers: this.getHeaders() });
+    return this._httpClient.put(`${environment.server}stores?id=${storeId}`, storeData, { headers: this.getHeaders() });
   }
 
   /***********************************************************/

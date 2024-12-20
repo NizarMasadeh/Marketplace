@@ -8,6 +8,9 @@
 
 <div class="store-container mt-3">
 
+    <div *ngIf="stores && !isLoading" class="menubar mb-5">
+        <p-menubar [model]="items" />
+    </div>
     <div *ngIf="isLoading || uploadingBg || uploadingLogo" class="skeleton">
         <div class="images-skeleton">
             <div class="bgimage w-full h-20rem">
@@ -72,4 +75,5 @@
     </div>
 </div>
 
+<p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>

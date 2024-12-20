@@ -33,6 +33,8 @@ export class MerchantService {
     });
   }
 
+  /******************MERCHANT INFO*************************/
+
   getMerchantProfile(): Observable<any> {
     if (this.isBrowser) {
       const merchantId = localStorage.getItem('userId');
@@ -43,8 +45,14 @@ export class MerchantService {
 
   getMerchantUser(): Observable<any> {
     const merchantId = localStorage.getItem('userId');
-    return this._httpClient.get(`${environment.server}users/profile?id=${merchantId}`, { headers: this.getHeaders()});
+    return this._httpClient.get(`${environment.server}users/profile?id=${merchantId}`, { headers: this.getHeaders() });
   }
+
+  /********************************************************/
+
+
+  /************************STORE****************************/
+
 
   createMerchantStore(storeForm: any): Observable<any> {
     if (this.isBrowser) {
@@ -61,6 +69,25 @@ export class MerchantService {
     }
     return of(null);
   }
+
+  updateStore(storeData: any): Observable<any> {
+    if (this.isBrowser) {
+      const storeId = localStorage.getItem('storeId');
+
+      return this._httpClient.put(`${environment.server}stores?id=${storeId}`, storeData, { headers: this.getHeaders() });
+    }
+    return of(null);
+  }
+
+  deleteStore(): Observable<any> {
+    const storeId = localStorage.getItem('storeId');
+    return this._httpClient.delete(`${environment.server}stores?id=${storeId}`, { headers: this.getHeaders() });
+  }
+
+  /********************************************************/
+
+
+  /*********************PRODUCTS***************************/
 
   getMerchantProducts(): Observable<any> {
     // Check if the platform is browser-based
@@ -80,12 +107,5 @@ export class MerchantService {
     return of(null)
   }
 
-  updateStore(storeData: any): Observable<any> {
-    if (this.isBrowser) {
-      const storeId = localStorage.getItem('storeId');
-
-      return this._httpClient.put(`${environment.server}stores?id=${storeId}`, storeData, { headers: this.getHeaders() });
-    }
-    return of(null);
-  }
+  /********************************************************/
 }

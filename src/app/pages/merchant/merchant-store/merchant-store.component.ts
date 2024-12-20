@@ -7,8 +7,10 @@ import { DialogModule } from 'primeng/dialog';
 import { SkeletonModule } from 'primeng/skeleton';
 import { fadeAnimation } from '../../../widgets/animations/fade.animation';
 import { ImagesService } from '../../../services/images/images.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { MenubarModule } from 'primeng/menubar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-merchant-store',
@@ -18,12 +20,14 @@ import { ToastModule } from 'primeng/toast';
     MerchantCreateStoreComponent,
     DialogModule,
     SkeletonModule,
-    ToastModule
+    ToastModule,
+    MenubarModule,
+    ConfirmDialogModule
   ],
   templateUrl: './merchant-store.component.html',
   styleUrl: './merchant-store.component.scss',
   animations: [fadeAnimation],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class MerchantStoreComponent implements OnInit {
 
@@ -32,6 +36,8 @@ export class MerchantStoreComponent implements OnInit {
   bgImageLoaded = false;
   logoImageLoaded = false;
   isTextLoading = false;
+
+  items: MenuItem[] | undefined;
 
   isLoading = false;
   isBrowser: boolean;
@@ -47,7 +53,8 @@ export class MerchantStoreComponent implements OnInit {
     private _merchantService: MerchantService,
     private _cdr: ChangeDetectorRef,
     private _imagesService: ImagesService,
-    private _messageService: MessageService
+    private _messageService: MessageService,
+    private _confirmationService: ConfirmationService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.isServer = isPlatformServer(this.platformId);
@@ -55,6 +62,58 @@ export class MerchantStoreComponent implements OnInit {
 
   ngOnInit() {
     this.getStores();
+
+    this.items = [
+      {
+        label: 'Home',
+        icon: 'pi pi-home'
+      },
+      {
+        label: 'Features',
+        icon: 'pi pi-star'
+      },
+      {
+        label: 'Projects',
+        icon: 'pi pi-search',
+        items: [
+          {
+            label: 'Components',
+            icon: 'pi pi-bolt'
+          },
+          {
+            label: 'Blocks',
+            icon: 'pi pi-server'
+          },
+          {
+            label: 'UI Kit',
+            icon: 'pi pi-pencil'
+          },
+          {
+            label: 'Templates',
+            icon: 'pi pi-palette',
+            items: [
+              {
+                label: 'Apollo',
+                icon: 'pi pi-palette'
+              },
+              {
+                label: 'Ultima',
+                icon: 'pi pi-palette'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Contact',
+        icon: 'pi pi-envelope'
+      },
+      {
+        label: 'Delete store',
+        icon: 'pi pi-trash',
+        command: () => this.onDeleteStore()
+      },
+    ]
   }
 
   getStores() {
@@ -190,6 +249,42 @@ export class MerchantStoreComponent implements OnInit {
 
   onCreateStore() {
     this.createStoreDialog = true;
+  }
+
+  onDeleteStore() {
+    this._confirmationService.confirm({
+      message: `Are you sure that you want to <b>Delete</b> ${this.stores.name}?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+
+
+        this._merchantService.deleteStore().subscribe({
+          next: () => {
+            this.isLoading = true;
+            this._messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: `${this.stores.name} was deleted!`
+            })
+
+            this.getStores();
+          },
+          error: (error) => {
+            console.error("Error deletin store: ", error);
+            this.isLoading = true;
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error deleting store!'
+            })
+          }
+        });
+      }
+    });
   }
 }
 
