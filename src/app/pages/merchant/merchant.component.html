@@ -20,7 +20,17 @@
         <h3 style="color: var(--red);"> Server error! try refreshing the page.</h3>
     </div>
 
-    <app-merchant-portal *ngIf="!isInActive" [collapsed]="isSideNavCollapsed"
+
+    <div *ngIf="sessionTimeOut" class=" flex flex-column justify-content-center align-items-center h-30rem">
+        <h3 style="color: var(--gray-400);"> Session timeout, you have to login again!</h3>
+        <div class="btn-container">
+            <p-button class="btn-hover" [loading]="isLoggingOut" [label]="isLoggingOut ? 'Logging out...' : 'Logout'"
+                (onClick)="onLogout()"></p-button>
+        </div>
+    </div>
+
+
+    <app-merchant-portal *ngIf="!isInActive && !sessionTimeOut" [collapsed]="isSideNavCollapsed"
         [screenWidth]="screenWidth"></app-merchant-portal>
 </div>
 

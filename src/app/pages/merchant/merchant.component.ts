@@ -12,6 +12,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { PendingSidenavComponent } from "./pending-sidenav/pending-sidenav.component";
 import { AuthService } from '../../auth/auth.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { UserService } from '../../services/user/user.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -30,7 +31,7 @@ interface SideNavToggle {
     SidenavComponent,
     PendingSidenavComponent,
     ProgressSpinnerModule
-],
+  ],
   templateUrl: './merchant.component.html',
   styleUrl: './merchant.component.scss',
   animations: [fadeAnimation],
@@ -49,15 +50,17 @@ export class MerchantComponent implements OnInit {
   isPending: boolean | undefined;
   isInActive: boolean | undefined;
   error: boolean | undefined;
+  sessionTimeOut: boolean | undefined;
 
   isLoggingOut = false;
   isLoading = false;
-  
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private _merchantService: MerchantService,
     private _cdr: ChangeDetectorRef,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _userService: UserService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -68,15 +71,29 @@ export class MerchantComponent implements OnInit {
 
       this._merchantService.getMerchantProfile().subscribe({
         next: (res: any) => {
-          const merchantstat = res.merchants[0].status;
-          if(merchantstat === 'Pending') {
-            this.isPending = true;
-          } else if(merchantstat === 'Active') {
-            this.isActive = true;
-          } else if(merchantstat === 'InActive') {
-            this.isInActive = true;
+          console.log("Data: ", res);
+
+          if (res.merchants.length === 0) {
+            this._userService.checkToken().subscribe({
+              error: (error) => {
+                console.error("Error fetching token", error);
+                localStorage.clear();
+                this.sessionTimeOut = true;
+                this.isLoading = false;
+
+              }
+            })
+          } else {
+            const merchantstat = res.merchants[0].status;
+            if (merchantstat === 'Pending') {
+              this.isPending = true;
+            } else if (merchantstat === 'Active') {
+              this.isActive = true;
+            } else if (merchantstat === 'InActive') {
+              this.isInActive = true;
+            }
+            this.isLoading = false;
           }
-          this.isLoading = false;
         }, error: (error) => {
           console.log("Error fetching merchant profile", error);
           this.error = true;
