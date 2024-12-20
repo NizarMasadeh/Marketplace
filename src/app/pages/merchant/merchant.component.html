@@ -4,7 +4,8 @@
 
 <div *ngIf="!isLoading" [@fadeAnimation] [@.disabled]="isLoading">
 
-    <app-sidenav-merchant *ngIf="isActive" (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
+    <app-sidenav-merchant *ngIf="isActive && !isInActive"
+        (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav-merchant>
 
     <app-pending-sidenav *ngIf="isPending" (onToggleSideNav)="onToggleSideNav($event)"></app-pending-sidenav>
 
@@ -25,12 +26,12 @@
         <h3 style="color: var(--gray-400);"> Session timeout, you have to login again!</h3>
         <div class="btn-container">
             <p-button class="btn-hover" [loading]="isLoggingOut" [label]="isLoggingOut ? 'Logging out...' : 'Logout'"
-                (onClick)="onLogout()"></p-button>
+                [routerLink]="['/login']"></p-button>
         </div>
     </div>
 
 
-    <app-merchant-portal *ngIf="!isInActive && !sessionTimeOut" [collapsed]="isSideNavCollapsed"
+    <app-merchant-portal *ngIf="!isInActive && !sessionTimeOut && !error" [collapsed]="isSideNavCollapsed"
         [screenWidth]="screenWidth"></app-merchant-portal>
 </div>
 

@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { fadeAnimation } from '../../widgets/animations/fade.animation';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
@@ -37,8 +37,10 @@ interface SideNavToggle {
   animations: [fadeAnimation],
   providers: [ConfirmationService, MessageService]
 })
-export class MerchantComponent implements OnInit {
+export class MerchantComponent implements OnInit, OnDestroy {
   private isBrowser: boolean;
+  private intervalId: any;
+
   #document = inject(DOCUMENT);
 
   items: MenuItem[] | undefined;
@@ -60,13 +62,23 @@ export class MerchantComponent implements OnInit {
     private _merchantService: MerchantService,
     private _cdr: ChangeDetectorRef,
     private _authService: AuthService,
-    private _userService: UserService
+    private _userService: UserService,
+    private _ngZone: NgZone
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
     if (this.isBrowser) {
+
+      this._ngZone.runOutsideAngular(() => {
+        this.intervalId = setInterval(() => {
+          this._ngZone.run(() => {
+            this.isAuth();
+          });
+        }, 10000);
+      })
+
       this.isLoading = true;
 
       this._merchantService.getMerchantProfile().subscribe({
@@ -95,8 +107,10 @@ export class MerchantComponent implements OnInit {
             this.isLoading = false;
           }
         }, error: (error) => {
-          console.log("Error fetching merchant profile", error);
-          this.error = true;
+          console.error("Error fetching merchant profile", error);
+          this.isLoading = false;
+          localStorage.clear();
+          this.sessionTimeOut = true;
           this.isLoading = false;
         }
       })
@@ -121,6 +135,66 @@ export class MerchantComponent implements OnInit {
       }
       this._cdr.detectChanges();
     }
+  }
+
+  isAuth() {
+    this._userService.checkToken().subscribe({
+      next: (res: any) => {
+        console.log("Authenticated", res);
+        this.checkMerchantStatus();
+        this.sessionTimeOut = false;
+      }, error: (error) => {
+        console.error("Error fetching token", error);
+        localStorage.clear();
+        this.sessionTimeOut = true;
+        this.isActive = false;
+        this._cdr.detectChanges();
+      }
+    })
+  }
+
+  checkMerchantStatus() {
+
+    this._merchantService.getMerchantProfile().subscribe({
+      next: (res: any) => {
+        console.log("Data: ", res);
+
+        if (res.merchants.length === 0) {
+          this._userService.checkToken().subscribe({
+            error: (error) => {
+              console.error("Error fetching token", error);
+              localStorage.clear();
+              this.sessionTimeOut = true;
+              this.isLoading = false;
+
+            }
+          })
+        } else {
+          this.isActive = true;
+          const merchantstat = res.merchants[0].status;
+          if (merchantstat === 'Pending') {
+            this.isPending = true;
+            this.isInActive = false;
+            localStorage.setItem('merchantStatus', 'Pending')
+          } else if (merchantstat === 'Active') {
+            this.isActive = true;
+            this.isInActive = false;
+            localStorage.setItem('merchantStatus', 'Active')
+          } else if (merchantstat === 'InActive') {
+            this.isInActive = true;
+            localStorage.setItem('merchantStatus', 'InActive')
+          }
+          this._cdr.detectChanges();
+        }
+      }, error: (error) => {
+        console.error("Error fetching merchant profile", error);
+        this.isLoading = false;
+        localStorage.clear();
+        this.sessionTimeOut = true;
+        this.isLoading = false;
+      }
+    })
+    this._cdr.detectChanges();
   }
 
   getMerchantData() {
@@ -151,6 +225,12 @@ export class MerchantComponent implements OnInit {
         this.isLoggingOut = false;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
   // loadMenuBar() {
   //   this.items = [
