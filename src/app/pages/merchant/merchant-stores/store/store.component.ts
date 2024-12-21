@@ -255,7 +255,7 @@ export class StoreComponent implements OnChanges {
       accept: () => {
 
 
-        this._merchantService.deleteStore().subscribe({
+        this._merchantService.deleteStoreById(this.storeId).subscribe({
           next: () => {
             this.isLoading = true;
             this._messageService.add({
@@ -264,7 +264,7 @@ export class StoreComponent implements OnChanges {
               detail: `${this.store.name} was deleted!`
             })
 
-            this.getStore();
+            this.backToStoresAfterEdit();
           },
           error: (error) => {
             console.error("Error deletin store: ", error);
@@ -283,6 +283,13 @@ export class StoreComponent implements OnChanges {
   backToStores() {
     this.showStore = false;
     this.noStoreEdits.emit();
+    this.storeId = null;
+    this.store = null;
+  }
+
+  backToStoresAfterEdit() {
+    this.showStore = false;
+    this.storeEdited.emit();
     this.storeId = null;
     this.store = null;
   }

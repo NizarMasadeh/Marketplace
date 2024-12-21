@@ -74,7 +74,7 @@
 </div>
 
 <app-store-of-merchant *ngIf="showSelectedStore" [showStore]="showSelectedStore" [storeId]="selectedStoreId"
-    (noStoreEdits)="closeStore()"></app-store-of-merchant>
+    (noStoreEdits)="closeStore()" (storeEdited)="closeStoreAfterEdit()"></app-store-of-merchant>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>

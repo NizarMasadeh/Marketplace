@@ -105,6 +105,12 @@ export class MerchantStoreComponent implements OnInit {
     this._cdr.detectChanges()
   }
 
+  closeStoreAfterEdit() {
+    this.selectedStoreId = null;
+    this.showSelectedStore = false;
+    this.getStores();
+  }
+
   onCreateStore() {
     this.createStoreDialog = true;
   }

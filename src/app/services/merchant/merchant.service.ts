@@ -83,8 +83,7 @@ export class MerchantService {
     return of(null);
   }
 
-  deleteStore(): Observable<any> {
-    const storeId = localStorage.getItem('storeId');
+  deleteStoreById(storeId: any): Observable<any> {
     return this._httpClient.delete(`${environment.server}stores?id=${storeId}`, { headers: this.getHeaders() });
   }
 
