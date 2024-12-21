@@ -21,6 +21,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 interface Category {
   name: string;
   code: string;
+  icon: string;
 }
 
 @Component({
@@ -59,16 +60,25 @@ export class MerchantCreateStoreComponent implements OnInit {
     store_logo: new FormControl('', Validators.required),
     store_bg: new FormControl('', Validators.required),
     reg_number: new FormControl('', Validators.required),
-    categories: new FormControl('', Validators.required)
+    categories: new FormControl([], Validators.required)
   });
 
   categories: Category[] = [
-    { name: 'Fashion', code: 'FASHION' },
-    { name: 'Electronics', code: 'ELECTRONICS' },
-    { name: 'Home & Decor', code: 'DECOR' },
-    { name: 'Sports', code: 'SPORTS' },
-    { name: 'Kids', code: 'KIDS' }
+    { name: 'Fashion', code: 'FASHION', icon: 'fas fa-tshirt' },
+    { name: 'Electronics', code: 'ELECTRONICS', icon: 'fas fa-tv' },
+    { name: 'Home & Decor', code: 'DECOR', icon: 'fas fa-couch' },
+    { name: 'Sports', code: 'SPORTS', icon: 'fas fa-football-ball' },
+    { name: 'Kids', code: 'KIDS', icon: 'fas fa-child' },
+    { name: 'Books', code: 'BOOKS', icon: 'fas fa-book' },
+    { name: 'Health & Beauty', code: 'HEALTH_BEAUTY', icon: 'fas fa-heart' },
+    { name: 'Automotive', code: 'AUTOMOTIVE', icon: 'fas fa-car' },
+    { name: 'Groceries', code: 'GROCERIES', icon: 'fas fa-apple-alt' },
+    { name: 'Travel', code: 'TRAVEL', icon: 'fas fa-plane' },
+    { name: 'Music & Entertainment', code: 'MUSIC_ENT', icon: 'fas fa-guitar' },
+    { name: 'Jewelry', code: 'JEWELRY', icon: 'fas fa-gem' },
+    { name: 'Office Supplies', code: 'OFFICE', icon: 'fas fa-briefcase' },
   ];
+
 
   countries: any[] | undefined;
   selectedCountry: string | undefined;
@@ -251,8 +261,6 @@ export class MerchantCreateStoreComponent implements OnInit {
   }
 
   closeDialog() {
-    console.log("Triggered");
-    
     this.storeForm.reset();
     this.selectedCountry = '';
     this.storeLogo = null;

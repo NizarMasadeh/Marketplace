@@ -1,72 +1,98 @@
-import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { MerchantService } from '../../../services/merchant/merchant.service';
-import { MerchantCreateStoreComponent } from "../dialogs/merchant-create-store/merchant-create-store.component";
-import { DialogModule } from 'primeng/dialog';
-import { SkeletonModule } from 'primeng/skeleton';
-import { fadeAnimation } from '../../../widgets/animations/fade.animation';
-import { ImagesService } from '../../../services/images/images.service';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
+import { fadeAnimation } from '../../../../widgets/animations/fade.animation';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MerchantService } from '../../../../services/merchant/merchant.service';
+import { ImagesService } from '../../../../services/images/images.service';
 
 @Component({
-  selector: 'app-merchant-store',
+  selector: 'app-store-of-merchant',
   imports: [
     CommonModule,
+    FormsModule,
     ButtonModule,
-    MerchantCreateStoreComponent,
-    DialogModule,
     SkeletonModule,
-    ToastModule,
     MenubarModule,
+    ToastModule,
     ConfirmDialogModule
   ],
-  templateUrl: './merchant-store.component.html',
-  styleUrl: './merchant-store.component.scss',
-  animations: [fadeAnimation],
-  providers: [MessageService, ConfirmationService]
+  templateUrl: './store.component.html',
+  styleUrl: './store.component.scss',
+  providers: [MessageService, ConfirmationService],
+  animations: [fadeAnimation]
 })
-export class MerchantStoreComponent implements OnInit {
+export class StoreComponent implements OnChanges {
+  private isBrowser: boolean;
+  @Input() storeId: any;
+  @Input() showStore = false;
+  @Output() storeEdited = new EventEmitter<boolean>();
+  @Output() noStoreEdits = new EventEmitter<boolean>();
 
-  stores: any;
-  createStoreDialog = false;
-  bgImageLoaded = false;
-  logoImageLoaded = false;
-  isTextLoading = false;
 
+  store: any;
   items: MenuItem[] | undefined;
 
-  isLoading = false;
-  isBrowser: boolean;
-  isServer: boolean;
 
+  isLoading = false;
   logoImg: string | null = null;
   uploadingLogo = false;
 
   bgImg: string | null = null;
   uploadingBg = false;
+  logoImageLoaded = false;
+  bgImageLoaded = false;
+  isTextLoading = false;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private _merchantService: MerchantService,
     private _cdr: ChangeDetectorRef,
-    private _imagesService: ImagesService,
     private _messageService: MessageService,
-    private _confirmationService: ConfirmationService
+    private _confirmationService: ConfirmationService,
+    private _merchantService: MerchantService,
+    private _imagesService: ImagesService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    this.isServer = isPlatformServer(this.platformId);
   }
 
-  ngOnInit() {
-    this.getStores();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.isBrowser) {
+      if (changes['storeId'] && this.showStore) {
+        console.log("Triggered");
 
+        this.getStore();
+      }
+    }
+  }
+  getStore() {
+    this.isLoading = true;
+
+    this._merchantService.getStoreById(this.storeId).subscribe({
+      next: (res: any) => {
+        this.store = res.stores[0]
+        this.loadMenuItems();
+        this.isLoading = false;
+        this._cdr.detectChanges();
+
+      }, error: (error) => {
+        console.error("Error fetching store: ", error);
+        this.loadMenuItems();
+        this.isLoading = false;
+      }
+    })
+  }
+
+  loadMenuItems() {
     this.items = [
       {
-        label: 'Home',
-        icon: 'pi pi-home'
+        label: 'Stores',
+        icon: 'pi pi-shop',
+        command: () => this.backToStores()
       },
       {
         label: 'Features',
@@ -116,39 +142,6 @@ export class MerchantStoreComponent implements OnInit {
     ]
   }
 
-  closeDialog() {
-    this.createStoreDialog = false;
-  }
-  
-  getStores() {
-    this.isLoading = true;
-    this.isTextLoading = true;
-
-    if (this.isBrowser) {
-      this._merchantService.getMerchantStores().subscribe(
-        (res: any) => {
-          console.log("stores: ", res);
-          
-          if (res && res.stores && res.stores.length > 0) {
-            this.stores = res.stores[0];
-            localStorage.setItem('storeId', this.stores.id)
-            this.isTextLoading = false;
-          } else {
-            this.stores = null;
-          }
-          this.isLoading = false;
-          this._cdr.detectChanges();
-        },
-        (error) => {
-          this.stores = null;
-          this.isLoading = false;
-          console.error('Error fetching stores:', error);
-          this._cdr.detectChanges();
-        }
-      );
-    }
-  }
-
   onLogoUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -164,7 +157,7 @@ export class MerchantStoreComponent implements OnInit {
 
           this._merchantService.updateStore(logoImg).subscribe(
             () => {
-              this.getStores();
+              this.getStore();
               this.uploadingLogo = false;
               this._messageService.add({
                 severity: 'success',
@@ -210,7 +203,7 @@ export class MerchantStoreComponent implements OnInit {
 
           this._merchantService.updateStore(bgImg).subscribe(
             () => {
-              this.getStores();
+              this.getStore();
               this.uploadingBg = false;
               this._messageService.add({
                 severity: 'success',
@@ -251,13 +244,9 @@ export class MerchantStoreComponent implements OnInit {
     this._cdr.detectChanges();
   }
 
-  onCreateStore() {
-    this.createStoreDialog = true;
-  }
-
   onDeleteStore() {
     this._confirmationService.confirm({
-      message: `Are you sure that you want to <b>Delete</b> ${this.stores.name}?`,
+      message: `Are you sure that you want to <b>Delete</b> ${this.store.name}?`,
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: "none",
@@ -272,10 +261,10 @@ export class MerchantStoreComponent implements OnInit {
             this._messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: `${this.stores.name} was deleted!`
+              detail: `${this.store.name} was deleted!`
             })
 
-            this.getStores();
+            this.getStore();
           },
           error: (error) => {
             console.error("Error deletin store: ", error);
@@ -290,5 +279,11 @@ export class MerchantStoreComponent implements OnInit {
       }
     });
   }
-}
 
+  backToStores() {
+    this.showStore = false;
+    this.noStoreEdits.emit();
+    this.storeId = null;
+    this.store = null;
+  }
+}

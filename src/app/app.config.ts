@@ -29,7 +29,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { ChipModule } from 'primeng/chip';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -64,6 +64,7 @@ export const appConfig: ApplicationConfig = {
     IconFieldModule,
     InputIconModule,
     InputSwitchModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ChipModule
   ]
 };

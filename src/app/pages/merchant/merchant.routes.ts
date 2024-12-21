@@ -6,7 +6,7 @@ import { DASHBOARD, MESSAGES, PRODUCTS, SETTINGS, STORE } from "./merchant.const
 
 export const MERCHANT_ROUTES: Routes = [
 
-    { path: '', redirectTo: DASHBOARD, pathMatch: 'full'},
+    { path: '', redirectTo: DASHBOARD, pathMatch: 'full' },
     {
         path: '',
         component: MerchantComponent,
@@ -17,7 +17,7 @@ export const MERCHANT_ROUTES: Routes = [
             },
             {
                 path: STORE,
-                loadComponent: () => import('./merchant-store/merchant-store.component').then(m => m.MerchantStoreComponent)
+                loadComponent: () => import('./merchant-stores/merchant-store.component').then(m => m.MerchantStoreComponent)
             },
             {
                 path: PRODUCTS,

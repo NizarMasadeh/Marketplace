@@ -31,9 +31,9 @@
             <div class="col-12 md:col-6">
                 <div class="field">
                     <label for="storeName" class="font-bold">Store Location</label>
-                    <p-dropdown [options]="countries" [optionLabel]="'country'"
-                        formControlName="location" [filter]="true" [style]="{width: '100%'}"
-                        placeholder="Select a country" (onChange)="onCountryChange($event)">
+                    <p-dropdown [options]="countries" [optionLabel]="'country'" formControlName="location"
+                        [filter]="true" [style]="{width: '100%'}" placeholder="Select a country"
+                        (onChange)="onCountryChange($event)">
                         <ng-template let-country pTemplate="item">
                             <div class="country-item">
                                 <img class="country-flag w-1 h-1 mr-4"
@@ -45,15 +45,25 @@
                 </div>
                 <div class="field">
                     <label for="storeName" class="font-bold">Store categoies</label>
-                    <p-multiSelect id="categories" [options]="categories" optionLabel="name" optionValue="code"
-                        formControlName="categories" placeholder="Select categories"
-                        (onChange)="showForm()"></p-multiSelect>
+                    <p-multiSelect id="categories" [options]="categories" optionLabel="name"
+                        formControlName="categories" placeholder="Select categories" (onChange)="showForm()">
+
+                        <ng-template let-category pTemplate="item">
+                            <i [class]="category.icon" style="margin-right: 8px;"></i>
+                            {{ category.name }}
+                        </ng-template>
+
+                        <ng-template let-category pTemplate="selectedItem">
+                            <i [class]="category.icon" style="margin-right: 8px;"></i>
+                            {{ category.name }}
+                        </ng-template>
+                    </p-multiSelect>
+
                 </div>
             </div>
         </div>
 
         <div class="images-section flex justify-content-center gap-6">
-            <!-- Store Logo -->
             <div class="image-upload">
                 <h3>Store Logo</h3>
                 <div class="image-container">
@@ -70,7 +80,6 @@
                 </div>
             </div>
 
-            <!-- Store Background -->
             <div class="image-upload">
                 <h3>Store Background</h3>
                 <div class="image-container">

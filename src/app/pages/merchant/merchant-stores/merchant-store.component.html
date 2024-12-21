@@ -1,0 +1,80 @@
+<div *ngIf="!stores && !isLoading" class="flex flex-column justify-content-center align-items-center h-30rem gap-6"
+    [@fadeAnimation] [@.disabled]="isLoading && isTextLoading">
+    <span class="text-2xl font-semibold">No stores found</span>
+    <button pButton (click)="onCreateStore()" label="Create store"></button>
+</div>
+
+<div *ngIf="!showSelectedStore && stores?.length > 0 && !isLoading" class="flex justify-content-start"
+    [ngClass]="!isLoading && stores?.length > 0 && !showSelectedStore ? 'fadeIn' : ''">
+    <button pButton (click)="onCreateStore()" label="Create store" icon="pi pi-plus"></button>
+</div>
+
+<app-merchant-create-store [(visible)]="createStoreDialog" (visibleChange)="closeDialog()"
+    (storeCreated)="getStores()"></app-merchant-create-store>
+
+
+<div *ngIf="!showSelectedStore" class="container mt-3">
+
+    <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" *ngIf="!isLoading"
+        [@fadeAnimation] [@.disabled]="isLoading">
+        @for (store of stores; track store.id) {
+
+        <div class="store-card" (click)="onStore(store)">
+            <div class="store-card-header relative">
+                <div class="dark-overlay">
+                    <img [src]="store.store_bg" alt="Banner" class="banner-image" />
+                </div>
+                <span class="status-badge"
+                    [ngClass]="store.status === 'Active' ? 'badge-active' : store.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
+                    {{store.status}}
+                </span>
+                <div *ngIf="store?.location?.flag" class="flagimg">
+                    <img [src]="'https://flagcdn.com/' + store?.location?.code + '.svg'" height="20px" width="20px"
+                        class="flag" alt="">
+                </div>
+            </div>
+            <div class="store-card-body relative">
+                <div class="store-avatar"
+                    [ngClass]="store.status === 'Active' ? 'border-active' : store.status === 'InActive' ? 'border-inactive' : 'border-pending'">
+                    <img [src]="store.store_logo" alt="Avatar" />
+                </div>
+                <div class="store-details">
+                    <h2 class="store-name">{{store.name}}</h2>
+                    <div class="location flex justify-content-center align-items-center gap-2">
+                        <i class="pi pi-map-marker"></i>
+                        <p class="store-location">{{store?.location?.country || 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="store-actions">
+                    @for (category of store?.categories; track category) {
+                    <p-chip [label]="category.name" [icon]="category.icon" />
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div *ngIf="!isLoading && stores?.length === 0"
+        class="no-stores flex justify-content-center align-items-center h-30rem" [@fadeAnimation]
+        [@.disabled]="isLoading && stores?.length > 0">
+        <h3>No stores found!</h3>
+    </div>
+
+    <div *ngIf="isLoading" class="skeleton-container">
+        <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" [@fadeAnimation]>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+            <p-skeleton height="20rem" width="18rem" borderRadius="16px"></p-skeleton>
+        </div>
+    </div>
+</div>
+
+<app-store-of-merchant *ngIf="showSelectedStore" [showStore]="showSelectedStore" [storeId]="selectedStoreId"
+    (noStoreEdits)="closeStore()"></app-store-of-merchant>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
