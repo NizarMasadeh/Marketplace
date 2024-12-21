@@ -1,0 +1,49 @@
+body .p-dialog .p-dialog-content {
+    padding: 0 !important;
+}
+
+.p-dialog-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.p-inputtext.p-component.p-filled {
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.p-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.border-active {
+    border-color: rgb(44, 228, 44) !important;
+}
+
+.border-inactive {
+    border-color: rgb(238, 15, 15) !important;
+}
+
+.border-pending {
+    border-color: rgb(236, 202, 4) !important;
+}
+
+.pfpImg {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid
+}
+
+.merchant-actions .action-button {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.merchant-actions:hover .action-button {
+    opacity: 1;
+    pointer-events: auto;
+}

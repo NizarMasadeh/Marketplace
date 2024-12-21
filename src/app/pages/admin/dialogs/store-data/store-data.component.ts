@@ -1,41 +1,48 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { fadeAnimation } from '../../../widgets/animations/fade.animation';
-import { AdminService } from '../../../services/admin/admin.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SkeletonModule } from 'primeng/skeleton';
-import { StoreDataComponent } from "../dialogs/store-data/store-data.component";
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+import { AdminService } from '../../../../services/admin/admin.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-stores',
+  selector: 'app-store-data',
   imports: [
     CommonModule,
+    DialogModule,
+    SkeletonModule,
+    TableModule,
+    TagModule,
+    InputTextModule,
     ButtonModule,
     ToastModule,
     ConfirmDialogModule,
-    DialogModule,
-    SkeletonModule,
-    StoreDataComponent
+    ProgressSpinnerModule,
+    ConfirmDialogModule
   ],
-  templateUrl: './stores.component.html',
-  styleUrl: './stores.component.scss',
-  animations: [fadeAnimation],
+  templateUrl: './store-data.component.html',
+  styleUrl: './store-data.component.scss',
   providers: [MessageService, ConfirmationService]
 })
-export class StoresComponent implements OnInit {
-
+export class StoreDataComponent implements OnChanges {
   private isBrowser: boolean;
-  stores: any;
-  status: string = '';
-  isUpdating = false;
-  isLoading = true;
+  @Input() visible = false;
+  @Input() storeId: any;
+  @Output() storeEdited = new EventEmitter<boolean>();
+  @Output() noStoreEdit = new EventEmitter<boolean>();
 
-  selectedStoreId: any;
-  showStore = false;
+  store: any
+  isLoading = false;
+  isUpdating = false;
+  status: any;
+  storeUpdated = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -47,36 +54,36 @@ export class StoresComponent implements OnInit {
     this.isBrowser = isPlatformBrowser(this.platformId)
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.isBrowser) {
-      this.getStores();
+      if (changes['storeId'] && this.visible) {
+        this.getStore();
+      }
     }
   }
 
-  getStores() {
+  getStore() {
     this.isLoading = true;
-    this._adminService.getStores().subscribe(
-      (res: any) => {
-        console.log("All stores: ", res);
-        this.stores = res.stores;
+    this._adminService.getStoreById(this.storeId).subscribe({
+      next: (res: any) => {
+        console.log("Selected store: ", res);
+        this.store = res.stores[0];
         this.isLoading = false;
-        this._cdr.detectChanges();
-      }, (error) => {
-        console.error("Error stuff: ", error);
+      }, error: (error) => {
+        console.error("Error fetching store: ", error);
         this.isLoading = false;
       }
-    )
+    })
   }
 
-  onUpdateStore(store: any) {
-    console.log("Selected: ", store);
+  onUpdateStore() {
 
     let statusText;
-    if (store.status === 'Active') {
-      statusText = 'Deactivate';
+    if (this.store.status === 'Active') {
+      statusText == 'Deactivate';
       this.status = 'InActive';
     } else {
-      statusText = 'Activate';
+      statusText == 'Activate';
       this.status = 'Active'
     }
 
@@ -88,7 +95,7 @@ export class StoresComponent implements OnInit {
       rejectIcon: "none",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.updateStore(store);
+        this.updateStore(this.store);
       },
       reject: () => {
         this._messageService.add({
@@ -118,8 +125,9 @@ export class StoresComponent implements OnInit {
       this._adminService.updateStore(store.id, updatedStatus).subscribe(
         (res: any) => {
           console.log("Store successfully updated: ", res);
-          this.getStores();
+          this.getStore();
           this.isUpdating = false;
+          this.storeUpdated = true;
 
           this._messageService.add({
             severity: 'success',
@@ -143,13 +151,13 @@ export class StoresComponent implements OnInit {
     }
   }
 
-  onStoreDialog(store: any) {
-    this.selectedStoreId = store.id;
-    this.showStore = true;
-  }
+  closeDialog() {
+    if (this.storeUpdated) {
+      this.storeEdited.emit();
+      this.storeUpdated = false;
+    }
+    this.noStoreEdit.emit();
 
-  closeStoreDialog() {
-    this.selectedStoreId = null;
-    this.showStore = false;
+    this.visible = false;
   }
 }

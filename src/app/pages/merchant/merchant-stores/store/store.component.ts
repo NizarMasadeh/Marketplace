@@ -10,6 +10,7 @@ import { fadeAnimation } from '../../../../widgets/animations/fade.animation';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MerchantService } from '../../../../services/merchant/merchant.service';
 import { ImagesService } from '../../../../services/images/images.service';
+import { ChipModule } from 'primeng/chip';
 
 @Component({
   selector: 'app-store-of-merchant',
@@ -20,7 +21,8 @@ import { ImagesService } from '../../../../services/images/images.service';
     SkeletonModule,
     MenubarModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ChipModule
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss',
@@ -95,44 +97,8 @@ export class StoreComponent implements OnChanges {
         command: () => this.backToStores()
       },
       {
-        label: 'Features',
-        icon: 'pi pi-star'
-      },
-      {
-        label: 'Projects',
-        icon: 'pi pi-search',
-        items: [
-          {
-            label: 'Components',
-            icon: 'pi pi-bolt'
-          },
-          {
-            label: 'Blocks',
-            icon: 'pi pi-server'
-          },
-          {
-            label: 'UI Kit',
-            icon: 'pi pi-pencil'
-          },
-          {
-            label: 'Templates',
-            icon: 'pi pi-palette',
-            items: [
-              {
-                label: 'Apollo',
-                icon: 'pi pi-palette'
-              },
-              {
-                label: 'Ultima',
-                icon: 'pi pi-palette'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: 'Contact',
-        icon: 'pi pi-envelope'
+        label: 'Store Settings',
+        icon: 'pi pi-cog'
       },
       {
         label: 'Delete store',

@@ -1,43 +1,52 @@
 <div class="container mt-3">
 
     <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" *ngIf="!isLoading"
-        [@fadeAnimation] [@.disabled]="isLoading">
+        [ngClass]="!isLoading ? 'fadeIn' : ''">
         @for (store of stores; track store.id) {
 
-        <div class="store-card">
+        <div class="store-card" (click)="onStoreDialog(store)">
             <div class="store-card-header relative">
                 <div class="dark-overlay">
                     <img [src]="store.store_bg" alt="Banner" class="banner-image" />
                 </div>
-                <span class="status-badge" [ngClass]="store.status === 'Active' ? 'badge-active' : store.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
+                <span class="status-badge"
+                    [ngClass]="store.status === 'Active' ? 'badge-active' : store.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
                     {{store.status}}
                 </span>
                 <div *ngIf="store?.location?.flag" class="flagimg">
-                    <img [src]="'https://flagcdn.com/' + store?.location?.code + '.svg'" height="20px" width="20px" class="flag" alt="">
+                    <img [src]="'https://flagcdn.com/' + store?.location?.code + '.svg'" height="20px" width="20px"
+                        class="flag" alt="">
                 </div>
             </div>
             <div class="store-card-body relative">
-                <div class="store-avatar" [ngClass]="store.status === 'Active' ? 'border-active' : store.status === 'InActive' ? 'border-inactive' : 'border-pending'">
+                <div class="store-avatar"
+                    [ngClass]="store.status === 'Active' ? 'border-active' : store.status === 'InActive' ? 'border-inactive' : 'border-pending'">
                     <img [src]="store.store_logo" alt="Avatar" />
                 </div>
                 <div class="store-details">
                     <h2 class="store-name">{{store.name}}</h2>
                     <div class="location flex justify-content-center align-items-center gap-2">
-                        <i class="pi pi-map-marker"></i>
+                        <i class="icon pi pi-map-marker"></i>
                         <p class="store-location">{{store?.location?.country || 'N/A'}}</p>
+                    </div>
+                    <div *ngIf="store?.merchant" class="merchant flex justify-content-center align-items-center gap-2">
+                        <i class="icon pi pi-user"></i>
+                        <span class="store-location">{{store?.merchant[0]?.full_name || 'N/A'}}</span>
                     </div>
                 </div>
                 <div class="store-actions">
-                    <p-button [severity]="store.status === 'Active' ? 'danger' : 'success'" [label]="store.status === 'Active' ? 'Deactivate' : 'Activate'" 
-                    (onClick)="onUpdateStore(store)" [loading]="isUpdating"></p-button>
+                    <p-button [severity]="store.status === 'Active' ? 'danger' : 'success'"
+                        [label]="store.status === 'Active' ? 'Deactivate' : 'Activate'"
+                        (onClick)="onUpdateStore(store); $event.stopPropagation()" [loading]="isUpdating"></p-button>
                 </div>
             </div>
         </div>
         }
     </div>
 
-    <div *ngIf="!isLoading && stores.length === 0" class="no-stores flex justify-content-center align-items-center h-30rem" 
-    [@fadeAnimation] [@.disabled]="isLoading && stores.length > 0">
+    <div *ngIf="!isLoading && stores.length === 0"
+        class="no-stores flex justify-content-center align-items-center h-30rem"
+        [ngClass]="!isLoading && stores.length > 0 ? 'fadeIn' : ''">
         <h3>No stores found!</h3>
     </div>
 
@@ -52,6 +61,9 @@
         </div>
     </div>
 </div>
+
+<app-store-data [visible]="showStore" [storeId]="selectedStoreId" (noStoreEdit)="closeStoreDialog()"
+    (storeEdited)="getStores()"></app-store-data>
 
 <p-toast />
 <p-confirmDialog />

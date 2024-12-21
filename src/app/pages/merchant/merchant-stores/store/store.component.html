@@ -4,7 +4,8 @@
         [@.disabled]="isLoading && !store && ! showStore">
         <p-menubar [model]="items" />
     </div>
-    <div *ngIf="isLoading || uploadingBg || uploadingLogo" class="skeleton">
+
+    <div *ngIf="isLoading || uploadingBg || uploadingLogo" class="skeleton relative">
         <div class="images-skeleton">
             <div class="bgimage w-full h-20rem">
                 <p-skeleton *ngIf="!bgImageLoaded || uploadingBg || uploadingLogo " width="100%"
@@ -63,6 +64,11 @@
                 <img [src]="'https://flagcdn.com/' + store?.location.code + '.svg'" height="20px" width="20px"
                     class="flag" alt="">
                 <span class="text-gray-400">{{store?.location.country}}</span>
+            </div>
+            <div class="categories flex justify-content-center align-items-center gap-2 mt-2">
+                @for ( category of store.categories; track category.name) {
+                <p-chip [label]="category.name" [icon]="category.icon"></p-chip>
+                }
             </div>
         </div>
     </div>

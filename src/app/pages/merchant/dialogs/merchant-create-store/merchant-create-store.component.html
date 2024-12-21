@@ -21,7 +21,7 @@
                 <div class="field">
                     <label for="reg_number" class="font-bold">Registeration Number</label>
                     <p-inputNumber inputId="withoutgrouping" pInputNumber formControlName="reg_number"
-                        placeholder="Reg number..." class="w-full" />
+                        placeholder="Reg number..." class="w-full" [useGrouping]="false" />
                     <small *ngIf="storeForm.get('reg_number')?.invalid && storeForm.get('reg_number')?.touched"
                         class="p-error">
                         Registeration number is required

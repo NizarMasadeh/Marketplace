@@ -1,5 +1,5 @@
 <div *ngIf="!stores && !isLoading" class="flex flex-column justify-content-center align-items-center h-30rem gap-6"
-    [@fadeAnimation] [@.disabled]="isLoading && isTextLoading">
+    [ngClass]="!isLoading && !isTextLoading ? 'fadeIn' : ''">
     <span class="text-2xl font-semibold">No stores found</span>
     <button pButton (click)="onCreateStore()" label="Create store"></button>
 </div>
@@ -16,7 +16,7 @@
 <div *ngIf="!showSelectedStore" class="container mt-3">
 
     <div class="cards-container w-full flex flex-wrap justify-content-start gap-7 mt-5" *ngIf="!isLoading"
-        [@fadeAnimation] [@.disabled]="isLoading">
+        [ngClass]="!isLoading ? 'fadeIn' : ''">
         @for (store of stores; track store.id) {
 
         <div class="store-card" (click)="onStore(store)">
@@ -46,9 +46,13 @@
                     </div>
                 </div>
                 <div class="store-actions">
-                    @for (category of store?.categories; track category) {
-                    <p-chip [label]="category.name" [icon]="category.icon" />
-                    }
+                    <ng-container *ngFor="let category of store?.categories.slice(0, 3); let i = index">
+                        <p-chip [label]="category.name" [icon]="category.icon"></p-chip>
+                    </ng-container>
+
+                    <ng-container *ngIf="store?.categories.length > 3">
+                        <p-chip [label]="'+' + (store?.categories.length - 3) + ' more'"></p-chip>
+                    </ng-container>
                 </div>
             </div>
         </div>

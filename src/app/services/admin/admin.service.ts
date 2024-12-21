@@ -82,6 +82,9 @@ export class AdminService {
     return this._httpClient.put(`${environment.server}stores?id=${storeId}`, storeData, { headers: this.getHeaders() });
   }
 
+  getStoreById(storeId: any): Observable<any> {
+    return this._httpClient.get(`${environment.server}stores?id=${storeId}`, { headers: this.getHeaders() });
+  }
   /***********************************************************/
 
 

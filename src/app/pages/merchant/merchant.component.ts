@@ -145,7 +145,6 @@ export class MerchantComponent implements OnInit, OnDestroy {
         this.sessionTimeOut = false;
       }, error: (error) => {
         console.error("Error fetching token", error);
-        localStorage.clear();
         this.sessionTimeOut = true;
         this.isActive = false;
         this._cdr.detectChanges();
@@ -161,12 +160,14 @@ export class MerchantComponent implements OnInit, OnDestroy {
 
         if (res.merchants.length === 0) {
           this._userService.checkToken().subscribe({
+            next: () => {
+              this._cdr.detectChanges();
+            },
             error: (error) => {
               console.error("Error fetching token", error);
-              localStorage.clear();
               this.sessionTimeOut = true;
               this.isLoading = false;
-
+              this._cdr.detectChanges();
             }
           })
         } else {
