@@ -1,7 +1,10 @@
 <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '80vw', maxWidth: '1200px' }" header="Add New Product"
     (onHide)="closeDialog()">
+
+
+
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid p-fluid">
-        <div class="col-12 md:col-8">
+        <div class="col-12 lg:col-8">
             <div class="card">
                 <h5 class="text-primary">General Product Information</h5>
 
@@ -130,7 +133,7 @@
                     </div>
                     <div *ngIf="mainImagePreview" [hidden]="uploadingImages" class="mt-2 image-preview">
                         <img [src]="mainImagePreview" (load)="loadMainImg()" class="w-full" [@fadeAnimation]
-                        [@.disabled]="uploadingImages"/>
+                            [@.disabled]="uploadingImages" />
                         <button pButton icon="pi pi-times"
                             class="p-button-danger p-button-rounded p-button-text absolute top-0 right-0"
                             (click)="removeMainImage()"></button>

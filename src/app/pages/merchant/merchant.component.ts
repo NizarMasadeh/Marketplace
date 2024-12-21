@@ -83,8 +83,6 @@ export class MerchantComponent implements OnInit, OnDestroy {
 
       this._merchantService.getMerchantProfile().subscribe({
         next: (res: any) => {
-          console.log("Data: ", res);
-
           if (res.merchants.length === 0) {
             this._userService.checkToken().subscribe({
               error: (error) => {
@@ -139,8 +137,7 @@ export class MerchantComponent implements OnInit, OnDestroy {
 
   isAuth() {
     this._userService.checkToken().subscribe({
-      next: (res: any) => {
-        console.log("Authenticated", res);
+      next: () => {
         this.checkMerchantStatus();
         this.sessionTimeOut = false;
       }, error: (error) => {
@@ -156,7 +153,6 @@ export class MerchantComponent implements OnInit, OnDestroy {
 
     this._merchantService.getMerchantProfile().subscribe({
       next: (res: any) => {
-        console.log("Data: ", res);
 
         if (res.merchants.length === 0) {
           this._userService.checkToken().subscribe({

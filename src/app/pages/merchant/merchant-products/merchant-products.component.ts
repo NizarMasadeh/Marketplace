@@ -6,6 +6,7 @@ import { MerchantAddProductComponent } from "../dialogs/merchant-add-product/mer
 import { isPlatformBrowser } from '@angular/common';
 import { fadeAnimation } from '../../../widgets/animations/fade.animation';
 import { SkeletonModule } from 'primeng/skeleton';
+import { AddProductComponent } from "../dialogs/add-product/add-product.component";
 
 @Component({
   selector: 'app-merchant-products',
@@ -13,7 +14,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     CommonModule,
     ButtonModule,
     MerchantAddProductComponent,
-    SkeletonModule
+    SkeletonModule,
+    AddProductComponent
   ],
   templateUrl: './merchant-products.component.html',
   styleUrl: './merchant-products.component.scss',

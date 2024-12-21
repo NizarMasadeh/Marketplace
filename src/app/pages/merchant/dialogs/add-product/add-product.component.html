@@ -1,0 +1,93 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '80vw', maxWidth: '1200px' }" header="Add New Product"
+    (onHide)="closeDialog()">
+
+    <div class="card flex justify-content-center">
+        <p-stepper>
+            <p-stepperPanel header="Header I">
+                <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
+                    <fieldset class="content-box flex flex-column justify-content-center">
+                        <legend>Select a store</legend>
+                        <div class="cards-container w-full flex flex-wrap justify-content-center gap-7 mt-5"
+                            *ngIf="!isLoading" [ngClass]="!isLoading ? 'fadeIn' : ''">
+                            @for (store of stores; track store.id) {
+
+                            <div class="store-card" (click)="onStore(store)">
+                                <div class="store-card-header relative">
+                                    <div class="dark-overlay">
+                                        <img [src]="store.store_bg" alt="Banner" class="banner-image" />
+                                    </div>
+                                    <span class="status-badge"
+                                        [ngClass]="store.status === 'Active' ? 'badge-active' : store.status === 'InActive' ? 'badge-inactive' : 'badge-pending'">
+                                        {{store.status}}
+                                    </span>
+                                    <div *ngIf="store?.location?.flag" class="flagimg">
+                                        <img [src]="'https://flagcdn.com/' + store?.location?.code + '.svg'"
+                                            height="20px" width="20px" class="flag" alt="">
+                                    </div>
+                                </div>
+                                <div class="store-card-body relative">
+                                    <div class="store-avatar"
+                                        [ngClass]="store.status === 'Active' ? 'border-active' : store.status === 'InActive' ? 'border-inactive' : 'border-pending'">
+                                        <img [src]="store.store_logo" alt="Avatar" />
+                                    </div>
+                                    <div class="store-details">
+                                        <h2 class="store-name">{{store.name}}</h2>
+                                        <div class="location flex justify-content-center align-items-center gap-2">
+                                            <i class="pi pi-map-marker"></i>
+                                            <p class="store-location">{{store?.location?.country || 'N/A'}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="store-actions">
+                                        <ng-container
+                                            *ngFor="let category of store?.categories.slice(0, 3); let i = index">
+                                            <p-chip [label]="category.name" [icon]="category.icon"></p-chip>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="store?.categories.length > 3">
+                                            <p-chip [label]="'+' + (store?.categories.length - 3) + ' more'"></p-chip>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </fieldset>
+                    <div class="flex pt-4 justify-content-end">
+                        <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
+                            (onClick)="nextCallback.emit()" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+            <p-stepperPanel header="Header II">
+                <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
+                    let-index="index">
+                    <div class="content-box flex flex-column">
+                        <div
+                            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                            Content II
+                        </div>
+                    </div>
+                    <div class="flex pt-4 justify-content-between">
+                        <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+                        <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
+                            (onClick)="nextCallback.emit()" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+            <p-stepperPanel header="Header III">
+                <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
+                    <div class="content-box flex flex-column">
+                        <div
+                            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                            Content III
+                        </div>
+                    </div>
+                    <div class="flex pt-4 justify-content-start">
+                        <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+        </p-stepper>
+    </div>
+
+</p-dialog>

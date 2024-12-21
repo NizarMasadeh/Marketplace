@@ -19,9 +19,10 @@ import { COUNTRIES } from '../../../../widgets/countries';
 import { SkeletonModule } from 'primeng/skeleton';
 import { fadeAnimation } from '../../../../widgets/animations/fade.animation';
 
-interface ProductCategory {
+interface Category {
   name: string;
   code: string;
+  icon: string;
 }
 
 interface ProductSize {
@@ -62,12 +63,20 @@ export class MerchantAddProductComponent implements OnInit {
 
   selectedCountry: any;
 
-  categories: ProductCategory[] = [
-    { name: 'Fashion', code: 'FASHION' },
-    { name: 'Electronics', code: 'ELECTRONICS' },
-    { name: 'Home & Decor', code: 'DECOR' },
-    { name: 'Sports', code: 'SPORTS' },
-    { name: 'Kids', code: 'KIDS' }
+  categories: Category[] = [
+    { name: 'Fashion', code: 'FASHION', icon: 'fas fa-tshirt' },
+    { name: 'Electronics', code: 'ELECTRONICS', icon: 'fas fa-tv' },
+    { name: 'Home & Decor', code: 'DECOR', icon: 'fas fa-couch' },
+    { name: 'Sports', code: 'SPORTS', icon: 'fas fa-football-ball' },
+    { name: 'Kids', code: 'KIDS', icon: 'fas fa-child' },
+    { name: 'Books', code: 'BOOKS', icon: 'fas fa-book' },
+    { name: 'Health & Beauty', code: 'HEALTH_BEAUTY', icon: 'fas fa-heart' },
+    { name: 'Automotive', code: 'AUTOMOTIVE', icon: 'fas fa-car' },
+    { name: 'Groceries', code: 'GROCERIES', icon: 'fas fa-apple-alt' },
+    { name: 'Travel', code: 'TRAVEL', icon: 'fas fa-plane' },
+    { name: 'Music & Entertainment', code: 'MUSIC_ENT', icon: 'fas fa-guitar' },
+    { name: 'Jewelry', code: 'JEWELRY', icon: 'fas fa-gem' },
+    { name: 'Office Supplies', code: 'OFFICE', icon: 'fas fa-briefcase' },
   ];
 
   sizeOptions: ProductSize[] = [

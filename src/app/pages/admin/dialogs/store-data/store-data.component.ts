@@ -66,7 +66,6 @@ export class StoreDataComponent implements OnChanges {
     this.isLoading = true;
     this._adminService.getStoreById(this.storeId).subscribe({
       next: (res: any) => {
-        console.log("Selected store: ", res);
         this.store = res.stores[0];
         this.isLoading = false;
       }, error: (error) => {

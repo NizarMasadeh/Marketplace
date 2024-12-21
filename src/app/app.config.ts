@@ -30,6 +30,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChipModule } from 'primeng/chip';
+import { StepperModule } from 'primeng/stepper';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -65,6 +66,7 @@ export const appConfig: ApplicationConfig = {
     InputIconModule,
     InputSwitchModule,
     ProgressSpinnerModule,
-    ChipModule
+    ChipModule,
+    StepperModule
   ]
 };

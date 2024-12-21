@@ -1,7 +1,8 @@
 <div class="container mt-4">
 
     <p-button (onClick)="addProduct()" icon="pi pi-plus"></p-button>
-    <div *ngIf="!isLoading && products?.length > 0" class="products w-full flex flex-wrap gap-8 mt-5" [@fadeAnimation] [@.disabled]="isLoading">
+    <div *ngIf="!isLoading && products?.length > 0" class="products w-full flex flex-wrap gap-8 mt-5" [@fadeAnimation]
+        [@.disabled]="isLoading">
 
 
         <div class="product-card" *ngFor="let product of products; let i = index" [@fadeAnimation]
@@ -136,5 +137,8 @@
         </div> -->
 </div>
 
-<app-merchant-add-product [(visible)]="addProductDialog" (visibleChange)="addProductDialog = false"
-    (productAdded)="getMerchantProducts()"></app-merchant-add-product>
+<!-- <app-merchant-add-product [(visible)]="addProductDialog" (visibleChange)="addProductDialog = false"
+    (productAdded)="getMerchantProducts()"></app-merchant-add-product> -->
+
+<app-add-product [(visible)]="addProductDialog" (visibleChange)="addProductDialog = false"
+    (productAdded)="getMerchantProducts()"></app-add-product>
